@@ -163,6 +163,24 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
+      - name: checkout opencv
+        uses: actions/checkout@v4
+        with:
+          repository: cscosine/opencv.git
+          path: opencv
+          ref: cs-main
+          fetch-depth: 1
+          token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+      - name: checkout opencv_contrib
+        uses: actions/checkout@v4
+        with:
+          repository: cscosine/opencv_contrib.git
+          path: opencv_contrib
+          ref: cs-main
+          fetch-depth: 1
+          token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
       # ---------------------------------------------------
       # Compute current SHAs
       - name: Compute current SHAs
@@ -172,6 +190,8 @@ jobs:
           # all other deps...
           echo "cscosine/csProjectManager.git=$(git -C csProjectManager rev-parse HEAD)" >> shas.txt
           echo "cscosine/csCMake.git=$(git -C csCMake rev-parse HEAD)" >> shas.txt
+          echo "cscosine/opencv.git=$(git -C opencv rev-parse HEAD)" >> shas.txt
+          echo "cscosine/opencv_contrib.git=$(git -C opencv_contrib rev-parse HEAD)" >> shas.txt
 
           cat shas.txt
 
@@ -241,13 +261,495 @@ jobs:
             echo "💤 Build skipped (early-exit)"
           fi
 
+  build-linux-linux-ninja:
+    needs: guard
+    if: needs.guard.outputs.should_build == 'true'
+
+    runs-on: ubuntu-latest
+    steps:
+
+    ##### UNCOMMENT AND MOVE THESE LINES IF YOU NEED A TERMINAL TO INTERACT AND INSPECT THE JOB
+    # - name: Start tmate session
+    #   uses: mxschmitt/action-tmate@v3
+
+    - name: Debounce # prevent multiple quick successive runs with dependent and main repo updates
+      run: sleep 60
+
+    # checkout myself
+    - name: checkout
+      uses: actions/checkout@v4
+
+    # ---------------------------------------------------
+    # checkout and commands
+    - name: checkout csProjectManager
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/csProjectManager.git
+        path: csProjectManager
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: Install prerequisites for Linux
+      run: ./installRequirements-linux.sh on linux
+
+    - name: checkout csCMake
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/csCMake.git
+        path: csCMake
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: checkout opencv
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/opencv.git
+        path: opencv
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: checkout opencv_contrib
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/opencv_contrib.git
+        path: opencv_contrib
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install Python dependencies
+      run: pip install -r csProjectManager/requirements.txt
+
+    - name: Run all pre-commit hooks
+      run: python3 project.py --install-hooks --run-hooks
+      working-directory: .
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    # build section
+    - name: Build linux-linux-ninja-opencv (1 / 2)
+      run: cmake --workflow linux-ninja-debug
+      working-directory: opencv
+
+    - name: Build linux-linux-ninja-opencv (2 / 2)
+      run: cmake --workflow linux-ninja-release
+      working-directory: opencv
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    # zip installation section
+    - name: Zip Installations linux-linux-ninja
+      run: |
+        if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+          VERSION=${GITHUB_REF_NAME}
+        else
+          VERSION=$(date +'%Y%m%d-%H%M%S')
+        fi
+
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "Using VERSION=$VERSION"
+
+        (
+          cd install/linux-ninja/
+          zip -r "$GITHUB_WORKSPACE/bundle-csOpenCV-${VERSION}-opencv-linux-linux-ninja.zip" opencv
+        )
+      shell: bash
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    # prepare artifacts section
+    - name: Upload Installation Artifacts linux-linux-ninja
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux-linux-ninja
+        if-no-files-found: error
+        path: |
+          bundle-csOpenCV-${{ env.VERSION }}-opencv-linux-linux-ninja.zip
+    # ---------------------------------------------------
+
+  build-linux-linux-ninja-multi-config-clang:
+    needs: guard
+    if: needs.guard.outputs.should_build == 'true'
+
+    runs-on: ubuntu-latest
+    steps:
+
+    ##### UNCOMMENT AND MOVE THESE LINES IF YOU NEED A TERMINAL TO INTERACT AND INSPECT THE JOB
+    # - name: Start tmate session
+    #   uses: mxschmitt/action-tmate@v3
+
+    - name: Debounce # prevent multiple quick successive runs with dependent and main repo updates
+      run: sleep 60
+
+    # checkout myself
+    - name: checkout
+      uses: actions/checkout@v4
+
+    # ---------------------------------------------------
+    # checkout and commands
+    - name: checkout csProjectManager
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/csProjectManager.git
+        path: csProjectManager
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: Install prerequisites for Linux
+      run: ./installRequirements-linux.sh on linux
+
+    - name: checkout csCMake
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/csCMake.git
+        path: csCMake
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: checkout opencv
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/opencv.git
+        path: opencv
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: checkout opencv_contrib
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/opencv_contrib.git
+        path: opencv_contrib
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install Python dependencies
+      run: pip install -r csProjectManager/requirements.txt
+
+    - name: Run all pre-commit hooks
+      run: python3 project.py --install-hooks --run-hooks
+      working-directory: .
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    # build section
+    - name: Build linux-linux-ninja-multi-config-clang-opencv (1 / 1)
+      run: cmake --workflow linux-ninja-multi-config-clang
+      working-directory: opencv
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    # zip installation section
+    - name: Zip Installations linux-linux-ninja-multi-config-clang
+      run: |
+        if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+          VERSION=${GITHUB_REF_NAME}
+        else
+          VERSION=$(date +'%Y%m%d-%H%M%S')
+        fi
+
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "Using VERSION=$VERSION"
+
+        (
+          cd install/linux-ninja-multi-config-clang/
+          zip -r "$GITHUB_WORKSPACE/bundle-csOpenCV-${VERSION}-opencv-linux-linux-ninja-multi-config-clang.zip" opencv
+        )
+      shell: bash
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    # prepare artifacts section
+    - name: Upload Installation Artifacts linux-linux-ninja-multi-config-clang
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux-linux-ninja-multi-config-clang
+        if-no-files-found: error
+        path: |
+          bundle-csOpenCV-${{ env.VERSION }}-opencv-linux-linux-ninja-multi-config-clang.zip
+    # ---------------------------------------------------
+
+  build-windows-msvc2022-x64:
+    needs: guard
+    if: needs.guard.outputs.should_build == 'true'
+
+    runs-on: windows-latest
+    steps:
+
+    - name: Debounce # prevent multiple quick successive runs with dependent and main repo updates
+      run: sleep 60
+
+    # checkout myself
+    - name: checkout
+      uses: actions/checkout@v4
+
+    # ---------------------------------------------------
+    # checkout and commands
+    - name: checkout csProjectManager
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/csProjectManager.git
+        path: csProjectManager
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: checkout csCMake
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/csCMake.git
+        path: csCMake
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: checkout opencv
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/opencv.git
+        path: opencv
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: checkout opencv_contrib
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/opencv_contrib.git
+        path: opencv_contrib
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install Python dependencies
+      run: pip install -r csProjectManager/requirements.txt
+
+    - name: Run all pre-commit hooks
+      run: python3 project.py --install-hooks --run-hooks
+      working-directory: .
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    # additional setup for windows
+    - name: Setup MSVC environment
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
+
+    # note: keep setup cmake after msvc setup to have the correct cmake in path
+    - name: Setup CMake
+      uses: lukka/get-cmake@latest
+
+    # ---------------------------------------------------
+    # ---------------------------------------------------
+    # build section
+    - name: Build windows-msvc2022-x64-opencv (1 / 1)
+      run: cmake --workflow msvc2022-x64
+      working-directory: opencv
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    # zip installation section
+    - name: Zip Installations windows-msvc2022-x64
+      shell: pwsh
+      run: |
+        if ($env:GITHUB_REF_TYPE -eq "tag") {
+          $VERSION = $env:GITHUB_REF_NAME
+        } else {
+          $VERSION = Get-Date -Format "yyyyMMdd-HHmmss"
+        }
+
+        "VERSION=$VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append
+        Write-Host "Using VERSION=$VERSION",
+
+        # zip opencv
+        $src = "install\msvc2022-x64\opencv"
+        $dst = "$env:GITHUB_WORKSPACE\bundle-csOpenCV-$VERSION-opencv-windows-msvc2022-x64.zip"
+
+        if (Test-Path $dst) {
+            Remove-Item $dst
+        }
+
+        Compress-Archive -Path $src -DestinationPath $dst
+
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    # prepare artifacts section
+    - name: Upload Installation Artifacts windows-msvc2022-x64
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-msvc2022-x64
+        if-no-files-found: error
+        path: |
+          bundle-csOpenCV-${{ env.VERSION }}-opencv-windows-msvc2022-x64.zip
+    # ---------------------------------------------------
+
+  build-windows-msvc2022-x64-LLVM:
+    needs: guard
+    if: needs.guard.outputs.should_build == 'true'
+
+    runs-on: windows-latest
+    steps:
+
+    - name: Debounce # prevent multiple quick successive runs with dependent and main repo updates
+      run: sleep 60
+
+    # checkout myself
+    - name: checkout
+      uses: actions/checkout@v4
+
+    # ---------------------------------------------------
+    # checkout and commands
+    - name: checkout csProjectManager
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/csProjectManager.git
+        path: csProjectManager
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: checkout csCMake
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/csCMake.git
+        path: csCMake
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: checkout opencv
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/opencv.git
+        path: opencv
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: checkout opencv_contrib
+      uses: actions/checkout@v4
+      with:
+        repository: cscosine/opencv_contrib.git
+        path: opencv_contrib
+        ref: cs-main
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install Python dependencies
+      run: pip install -r csProjectManager/requirements.txt
+
+    - name: Run all pre-commit hooks
+      run: python3 project.py --install-hooks --run-hooks
+      working-directory: .
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    # additional setup for windows
+    - name: Setup MSVC environment
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
+
+    # note: keep setup cmake after msvc setup to have the correct cmake in path
+    - name: Setup CMake
+      uses: lukka/get-cmake@latest
+
+    # ---------------------------------------------------
+    # ---------------------------------------------------
+    # build section
+    - name: Build windows-msvc2022-x64-LLVM-opencv (1 / 1)
+      run: cmake --workflow msvc2022-x64-LLVM
+      working-directory: opencv
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    # zip installation section
+    - name: Zip Installations windows-msvc2022-x64-LLVM
+      shell: pwsh
+      run: |
+        if ($env:GITHUB_REF_TYPE -eq "tag") {
+          $VERSION = $env:GITHUB_REF_NAME
+        } else {
+          $VERSION = Get-Date -Format "yyyyMMdd-HHmmss"
+        }
+
+        "VERSION=$VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append
+        Write-Host "Using VERSION=$VERSION",
+
+        # zip opencv
+        $src = "install\msvc2022-x64-LLVM\opencv"
+        $dst = "$env:GITHUB_WORKSPACE\bundle-csOpenCV-$VERSION-opencv-windows-msvc2022-x64-LLVM.zip"
+
+        if (Test-Path $dst) {
+            Remove-Item $dst
+        }
+
+        Compress-Archive -Path $src -DestinationPath $dst
+
+    # ---------------------------------------------------
+
+    # ---------------------------------------------------
+    # prepare artifacts section
+    - name: Upload Installation Artifacts windows-msvc2022-x64-LLVM
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-msvc2022-x64-LLVM
+        if-no-files-found: error
+        path: |
+          bundle-csOpenCV-${{ env.VERSION }}-opencv-windows-msvc2022-x64-LLVM.zip
+    # ---------------------------------------------------
+
   # ---------------------------------------------------
   # create release section
   create-release:
     runs-on: ubuntu-latest
-    needs: []  # waits for all builds
+    needs: [build-linux-linux-ninja, build-linux-linux-ninja-multi-config-clang, build-windows-msvc2022-x64, build-windows-msvc2022-x64-LLVM]  # waits for all builds
     if: ${{ github.ref_type == 'tag' }}   # only on tag
     steps:
+      - name: Download artifacts linux-linux-ninja
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-linux-ninja
+          path: linux-linux-ninja
+
+      - name: Download artifacts linux-linux-ninja-multi-config-clang
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-linux-ninja-multi-config-clang
+          path: linux-linux-ninja-multi-config-clang
+
+      - name: Download artifacts windows-msvc2022-x64
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-msvc2022-x64
+          path: windows-msvc2022-x64
+
+      - name: Download artifacts windows-msvc2022-x64-LLVM
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-msvc2022-x64-LLVM
+          path: windows-msvc2022-x64-LLVM
+
       - name: Create GitHub release and upload assets
         uses: softprops/action-gh-release@v1
         with:
@@ -255,6 +757,10 @@ jobs:
           name: Release ${{ github.ref_name }}
           fail_on_unmatched_files: true
           files: |
+            linux-linux-ninja/*.zip
+            linux-linux-ninja-multi-config-clang/*.zip
+            windows-msvc2022-x64/*.zip
+            windows-msvc2022-x64-LLVM/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   # ---------------------------------------------------

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from typing import Dict, List
+
 
 def checkout_func():
     from csProjectManager.projectManager import (
@@ -12,9 +14,11 @@ def checkout_func():
     repo_https_url = "https://api.github.com/repos/"
     branch = "cs-main"
 
-    _ = repo_https_url
-    _ = csRunCommand
-    _ = csGetPrecompiledLib
+    csRunCommand(
+        name="Install prerequisites for Linux",
+        command="./installRequirements-linux.sh",
+        os_name="linux",
+    )
 
     csGetRepository(
         repo_cs_url,
@@ -24,21 +28,41 @@ def checkout_func():
         needCMakeUserPathFile=False,
     )
 
-    _ = csGetRepository
-    _ = csRunCommand
+    # opencv
+    csGetRepository(
+        repo_cs_url,
+        "cscosine/opencv.git",
+        "opencv",
+        branch,
+        needCMakeUserPathFile=False,
+    )
+    csGetRepository(
+        repo_cs_url,
+        "cscosine/opencv_contrib.git",
+        "opencv_contrib",
+        branch,
+        needCMakeUserPathFile=False,
+    )
+
+    # 3rd party precompiled libraries
+    libs_os_presets: Dict[str, List[str]] = {
+        "linux": ["linux-ninja", "linux-ninja-multi-config-clang"],
+        "windows": ["msvc2022-x64", "msvc2022-x64-LLVM"],
+    }
+    csGetPrecompiledLib(
+        repo_https_url + "cscosine",
+        "3rdPartyBaseLibs",
+        "eigen3",
+        "v0.1.0-test",
+        libs_os_presets,
+    )
+
     _ = csGetPrecompiledLib
-    pass
+    _ = repo_https_url
 
 
 def build_func():
     from csProjectManager.projectManager import csWorkflow
-
-    # for interface only libraries, generate a single configuration only (use release)
-    # note, use the {} to enable properly the -po option (preset only)
-    presetRelease = {
-        "linux": ["linux-ninja{release}", "linux-ninja-multi-config-clang"],
-        "windows": ["msvc2022-x64", "msvc2022-x64-LLVM"],
-    }
 
     # use {debug|release}
     presetDebugRelease = {
@@ -46,20 +70,8 @@ def build_func():
         "windows": ["msvc2022-x64", "msvc2022-x64-LLVM"],
     }
 
-    # use {debug|release|relWithDebInfo|paranoid}
-    presetsAll = {
-        "linux": [
-            "linux-ninja{debug|release|relWithDebInfo|paranoid}",
-            "linux-ninja-multi-config-clang",
-        ],
-        "windows": ["msvc2022-x64", "msvc2022-x64-LLVM"],
-    }
-
-    _ = presetRelease
-    _ = presetDebugRelease
-    _ = presetsAll
-
-    _ = csWorkflow
+    # build only opencv, it will build opencv_contrib too
+    csWorkflow("opencv", presetDebugRelease)
 
 
 ############################################################################################
