@@ -11,16 +11,22 @@ on:
   pull_request:
     branches: [ "cs-main" ]
 
-  # 2️⃣ Manual trigger
-  workflow_dispatch:   # manual trigger
+  # 2️⃣ Manual trigger (UI + API)
+  workflow_dispatch:
+    inputs:
+      source_repo:
+        description: "Upstream repository"
+        required: false
+      source_branch:
+        description: "Upstream branch"
+        required: false
+      source_commit:
+        description: "Upstream commit"
+        required: false
 
   # 3️⃣ Scheduled (weekly)
   schedule:
     - cron: "0 3 * * 1"   # Every Monday at 03:00 UTC
-
-  # 4️⃣ Triggered by other repositories
-  repository_dispatch:
-    types: [ dependent-repo-change ]
 
 permissions:
   contents: write
@@ -103,12 +109,10 @@ jobs:
         run: |
           echo "event_name=${{ github.event_name }}" >> $GITHUB_OUTPUT
 
-          if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
-            echo "trigger=dependent-repo" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.event_name }}" == "schedule" ]]; then
+          if [[ "${{ github.event_name }}" == "schedule" ]]; then
             echo "trigger=scheduled" >> $GITHUB_OUTPUT
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "trigger=manual" >> $GITHUB_OUTPUT
+            echo "trigger=manual-or-api" >> $GITHUB_OUTPUT
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "trigger=pull-request" >> $GITHUB_OUTPUT
           else
@@ -121,13 +125,9 @@ jobs:
           echo "Trigger    : ${{ steps.trigger.outputs.trigger }}"
           echo "Ref        : ${{ github.ref }}"
           echo "SHA        : ${{ github.sha }}"
-
-      # 🔍 Optional: inspect repository_dispatch payload
-      - name: Print repository dispatch payload
-        if: github.event_name == 'repository_dispatch'
-        run: |
-          echo "Source repo : ${{ github.event.client_payload.source_repo }}"
-          echo "Commit      : ${{ github.event.client_payload.commit }}"
+          echo "Source repo:    ${{ github.event.inputs.source_repo }}"
+          echo "Source branch:  ${{ github.event.inputs.source_branch }}"
+          echo "Source commit:  ${{ github.event.inputs.source_commit }}"
 
   guard:
     name: Early-Exit Guard
