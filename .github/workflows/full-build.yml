@@ -353,12 +353,34 @@ jobs:
     # ---------------------------------------------------
     # build section
     - name: Build linux-linux-ninja-opencv (1 / 2)
-      run: cmake --workflow linux-ninja-debug
+      run: cmake --workflow linux-ninja-debug &> ../opencv-linux-linux-ninja-1-build_output.log
       working-directory: opencv
 
+    - name: Upload build log
+      uses: actions/upload-artifact@v4
+      with:
+        name: opencv-linux-linux-ninja-1-build_output.log
+        path: opencv-linux-linux-ninja-1-build_output.log
+
+    - name: Show last lines on failure
+      if: failure()
+      run: tail -n 200 opencv-linux-linux-ninja-1-build_output.log
+      working-directory: .
+
     - name: Build linux-linux-ninja-opencv (2 / 2)
-      run: cmake --workflow linux-ninja-release
+      run: cmake --workflow linux-ninja-release &> ../opencv-linux-linux-ninja-2-build_output.log
       working-directory: opencv
+
+    - name: Upload build log
+      uses: actions/upload-artifact@v4
+      with:
+        name: opencv-linux-linux-ninja-2-build_output.log
+        path: opencv-linux-linux-ninja-2-build_output.log
+
+    - name: Show last lines on failure
+      if: failure()
+      run: tail -n 200 opencv-linux-linux-ninja-2-build_output.log
+      working-directory: .
 
     # ---------------------------------------------------
 
@@ -482,8 +504,19 @@ jobs:
     # ---------------------------------------------------
     # build section
     - name: Build linux-linux-ninja-multi-config-clang-opencv (1 / 1)
-      run: cmake --workflow linux-ninja-multi-config-clang
+      run: cmake --workflow linux-ninja-multi-config-clang &> ../opencv-linux-linux-ninja-multi-config-clang-1-build_output.log
       working-directory: opencv
+
+    - name: Upload build log
+      uses: actions/upload-artifact@v4
+      with:
+        name: opencv-linux-linux-ninja-multi-config-clang-1-build_output.log
+        path: opencv-linux-linux-ninja-multi-config-clang-1-build_output.log
+
+    - name: Show last lines on failure
+      if: failure()
+      run: tail -n 200 opencv-linux-linux-ninja-multi-config-clang-1-build_output.log
+      working-directory: .
 
     # ---------------------------------------------------
 
@@ -612,9 +645,19 @@ jobs:
     # ---------------------------------------------------
     # build section
     - name: Build windows-msvc2022-x64-opencv (1 / 1)
-      run: cmake --workflow msvc2022-x64
+      run: cmake --workflow msvc2022-x64 *> ../opencv-windows-msvc2022-x64-1-build_output.log
       working-directory: opencv
 
+    - name: Upload build log
+      uses: actions/upload-artifact@v4
+      with:
+        name: opencv-windows-msvc2022-x64-1-build_output.log
+        path: opencv-windows-msvc2022-x64-1-build_output.log
+
+    - name: Show last lines on failure
+      if: failure()
+      run: Get-Content opencv-windows-msvc2022-x64-1-build_output.log -Tail 200
+      working-directory: .
     # ---------------------------------------------------
 
     # ---------------------------------------------------
@@ -757,9 +800,19 @@ jobs:
     # ---------------------------------------------------
     # build section
     - name: Build windows-msvc2022-x64-LLVM-opencv (1 / 1)
-      run: cmake --workflow msvc2022-x64-LLVM
+      run: cmake --workflow msvc2022-x64-LLVM *> ../opencv-windows-msvc2022-x64-LLVM-1-build_output.log
       working-directory: opencv
 
+    - name: Upload build log
+      uses: actions/upload-artifact@v4
+      with:
+        name: opencv-windows-msvc2022-x64-LLVM-1-build_output.log
+        path: opencv-windows-msvc2022-x64-LLVM-1-build_output.log
+
+    - name: Show last lines on failure
+      if: failure()
+      run: Get-Content opencv-windows-msvc2022-x64-LLVM-1-build_output.log -Tail 200
+      working-directory: .
     # ---------------------------------------------------
 
     # ---------------------------------------------------
