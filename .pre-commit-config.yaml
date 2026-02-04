@@ -18,6 +18,7 @@ repos:
           - pre-commit
           - requests
           - keyring
+          - jinja2
 
       - id: check-generated-workflow-yml
         name: Check generated YAML Workflow consistency
@@ -30,6 +31,7 @@ repos:
           - pre-commit
           - requests
           - keyring
+          - jinja2
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0

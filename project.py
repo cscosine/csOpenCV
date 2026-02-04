@@ -53,7 +53,7 @@ def checkout_func():
         repo_https_url + "cscosine",
         "3rdPartyBaseLibs",
         "eigen3",
-        "v0.1.0-test",
+        "v0.1.0-rc1",
         libs_os_presets,
     )
 

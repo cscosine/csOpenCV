@@ -137,6 +137,9 @@ jobs:
       should_build: ${{ steps.decision.outputs.should_build }}
 
     steps:
+      - name: Debounce # prevent multiple quick successive runs with dependent and main repo updates
+        run: sleep 60
+
       # checkout myself
       - name: checkout
         uses: actions/checkout@v4
@@ -202,9 +205,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: shas-prev.txt
-          key: deps-sha-${{ github.ref_name }}
+          key: deps-sha-${{ github.ref_name }}-${{ github.run_id }}
           restore-keys: |
-            deps-sha-
+            deps-sha-${{ github.ref_name }}-
 
       # ---------------------------------------------------
       # Decide whether to build
@@ -242,7 +245,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: shas-prev.txt
-          key: deps-sha-${{ github.ref_name }}
+          key: deps-sha-${{ github.ref_name }}-${{ github.run_id }}
 
       # ---------------------------------------------------
       # 🔹 Show nice summary in Actions UI
@@ -272,8 +275,6 @@ jobs:
     # - name: Start tmate session
     #   uses: mxschmitt/action-tmate@v3
 
-    - name: Debounce # prevent multiple quick successive runs with dependent and main repo updates
-      run: sleep 60
 
     # checkout myself
     - name: checkout
@@ -315,6 +316,23 @@ jobs:
         path: opencv_contrib
         ref: cs-main
         token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: Download eigen3 bundle (linux/linux-ninja)
+      uses: robinraju/release-downloader@v1.10
+      with:
+        repository: cscosine/3rdPartyBaseLibs
+        tag: v0.1.0-rc1
+        fileName: bundle-3rdPartyBaseLibs-v0.1.0-rc1-eigen3-linux-linux-ninja.zip
+        out-file-path: libs/linux-ninja
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: Extract eigen3 bundle (linux/linux-ninja)
+      shell: bash
+      run: |
+        unzip -o libs/linux-ninja/*.zip -d libs/linux-ninja
+        rm -f libs/linux-ninja/*.zip
+
+
     # ---------------------------------------------------
 
     # ---------------------------------------------------
@@ -331,6 +349,7 @@ jobs:
       working-directory: .
     # ---------------------------------------------------
 
+
     # ---------------------------------------------------
     # build section
     - name: Build linux-linux-ninja-opencv (1 / 2)
@@ -340,6 +359,7 @@ jobs:
     - name: Build linux-linux-ninja-opencv (2 / 2)
       run: cmake --workflow linux-ninja-release
       working-directory: opencv
+
     # ---------------------------------------------------
 
     # ---------------------------------------------------
@@ -384,8 +404,6 @@ jobs:
     # - name: Start tmate session
     #   uses: mxschmitt/action-tmate@v3
 
-    - name: Debounce # prevent multiple quick successive runs with dependent and main repo updates
-      run: sleep 60
 
     # checkout myself
     - name: checkout
@@ -427,6 +445,23 @@ jobs:
         path: opencv_contrib
         ref: cs-main
         token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+
+    - name: Download eigen3 bundle (linux/linux-ninja-multi-config-clang)
+      uses: robinraju/release-downloader@v1.10
+      with:
+        repository: cscosine/3rdPartyBaseLibs
+        tag: v0.1.0-rc1
+        fileName: bundle-3rdPartyBaseLibs-v0.1.0-rc1-eigen3-linux-linux-ninja-multi-config-clang.zip
+        out-file-path: libs/linux-ninja-multi-config-clang
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: Extract eigen3 bundle (linux/linux-ninja-multi-config-clang)
+      shell: bash
+      run: |
+        unzip -o libs/linux-ninja-multi-config-clang/*.zip -d libs/linux-ninja-multi-config-clang
+        rm -f libs/linux-ninja-multi-config-clang/*.zip
+
     # ---------------------------------------------------
 
     # ---------------------------------------------------
@@ -443,11 +478,13 @@ jobs:
       working-directory: .
     # ---------------------------------------------------
 
+
     # ---------------------------------------------------
     # build section
     - name: Build linux-linux-ninja-multi-config-clang-opencv (1 / 1)
       run: cmake --workflow linux-ninja-multi-config-clang
       working-directory: opencv
+
     # ---------------------------------------------------
 
     # ---------------------------------------------------
@@ -488,8 +525,6 @@ jobs:
     runs-on: windows-latest
     steps:
 
-    - name: Debounce # prevent multiple quick successive runs with dependent and main repo updates
-      run: sleep 60
 
     # checkout myself
     - name: checkout
@@ -528,6 +563,23 @@ jobs:
         path: opencv_contrib
         ref: cs-main
         token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: Download eigen3 bundle (windows/msvc2022-x64)
+      uses: robinraju/release-downloader@v1.10
+      with:
+        repository: cscosine/3rdPartyBaseLibs
+        tag: v0.1.0-rc1
+        fileName: bundle-3rdPartyBaseLibs-v0.1.0-rc1-eigen3-windows-msvc2022-x64.zip
+        out-file-path: libs/msvc2022-x64
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: Extract eigen3 bundle (windows/msvc2022-x64)
+      shell: pwsh
+      run: |
+        Expand-Archive -Path "libs/msvc2022-x64\*.zip" -DestinationPath "libs/msvc2022-x64" -Force
+        Remove-Item -Path "libs/msvc2022-x64\*.zip" -Force
+
+
     # ---------------------------------------------------
 
     # ---------------------------------------------------
@@ -556,11 +608,13 @@ jobs:
       uses: lukka/get-cmake@latest
 
     # ---------------------------------------------------
+
     # ---------------------------------------------------
     # build section
     - name: Build windows-msvc2022-x64-opencv (1 / 1)
       run: cmake --workflow msvc2022-x64
       working-directory: opencv
+
     # ---------------------------------------------------
 
     # ---------------------------------------------------
@@ -575,19 +629,28 @@ jobs:
         }
 
         "VERSION=$VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append
-        Write-Host "Using VERSION=$VERSION",
+        Write-Host "Using VERSION=$VERSION"
 
         # zip opencv
-        $src = "install\msvc2022-x64\opencv"
+
+        $src = "$env:GITHUB_WORKSPACE\install\msvc2022-x64\opencv"
         $dst = "$env:GITHUB_WORKSPACE\bundle-csOpenCV-$VERSION-opencv-windows-msvc2022-x64.zip"
+        Write-Host "*** src $src"
+        Write-Host "*** dst $dst"
 
         if (Test-Path $dst) {
             Remove-Item $dst
         }
 
+
+        if (-not (Test-Path $src)) {
+          throw "Source path does not exist: $src"
+        }
+
         Compress-Archive -Path $src -DestinationPath $dst
 
     # ---------------------------------------------------
+
 
     # ---------------------------------------------------
     # prepare artifacts section
@@ -607,8 +670,6 @@ jobs:
     runs-on: windows-latest
     steps:
 
-    - name: Debounce # prevent multiple quick successive runs with dependent and main repo updates
-      run: sleep 60
 
     # checkout myself
     - name: checkout
@@ -647,6 +708,23 @@ jobs:
         path: opencv_contrib
         ref: cs-main
         token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+
+    - name: Download eigen3 bundle (windows/msvc2022-x64-LLVM)
+      uses: robinraju/release-downloader@v1.10
+      with:
+        repository: cscosine/3rdPartyBaseLibs
+        tag: v0.1.0-rc1
+        fileName: bundle-3rdPartyBaseLibs-v0.1.0-rc1-eigen3-windows-msvc2022-x64-LLVM.zip
+        out-file-path: libs/msvc2022-x64-LLVM
+        token: ${{ secrets.ACTIONS_ORG_ACCESS }}
+
+    - name: Extract eigen3 bundle (windows/msvc2022-x64-LLVM)
+      shell: pwsh
+      run: |
+        Expand-Archive -Path "libs/msvc2022-x64-LLVM\*.zip" -DestinationPath "libs/msvc2022-x64-LLVM" -Force
+        Remove-Item -Path "libs/msvc2022-x64-LLVM\*.zip" -Force
+
     # ---------------------------------------------------
 
     # ---------------------------------------------------
@@ -675,11 +753,13 @@ jobs:
       uses: lukka/get-cmake@latest
 
     # ---------------------------------------------------
+
     # ---------------------------------------------------
     # build section
     - name: Build windows-msvc2022-x64-LLVM-opencv (1 / 1)
       run: cmake --workflow msvc2022-x64-LLVM
       working-directory: opencv
+
     # ---------------------------------------------------
 
     # ---------------------------------------------------
@@ -694,19 +774,28 @@ jobs:
         }
 
         "VERSION=$VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append
-        Write-Host "Using VERSION=$VERSION",
+        Write-Host "Using VERSION=$VERSION"
 
         # zip opencv
-        $src = "install\msvc2022-x64-LLVM\opencv"
+
+        $src = "$env:GITHUB_WORKSPACE\install\msvc2022-x64-LLVM\opencv"
         $dst = "$env:GITHUB_WORKSPACE\bundle-csOpenCV-$VERSION-opencv-windows-msvc2022-x64-LLVM.zip"
+        Write-Host "*** src $src"
+        Write-Host "*** dst $dst"
 
         if (Test-Path $dst) {
             Remove-Item $dst
         }
 
+
+        if (-not (Test-Path $src)) {
+          throw "Source path does not exist: $src"
+        }
+
         Compress-Archive -Path $src -DestinationPath $dst
 
     # ---------------------------------------------------
+
 
     # ---------------------------------------------------
     # prepare artifacts section
@@ -719,13 +808,15 @@ jobs:
           bundle-csOpenCV-${{ env.VERSION }}-opencv-windows-msvc2022-x64-LLVM.zip
     # ---------------------------------------------------
 
+
   # ---------------------------------------------------
   # create release section
   create-release:
     runs-on: ubuntu-latest
-    needs: [build-linux-linux-ninja, build-linux-linux-ninja-multi-config-clang, build-windows-msvc2022-x64, build-windows-msvc2022-x64-LLVM]  # waits for all builds
+    needs: [ build-linux-linux-ninja, build-linux-linux-ninja-multi-config-clang, build-windows-msvc2022-x64, build-windows-msvc2022-x64-LLVM ]  # waits for all builds
     if: ${{ github.ref_type == 'tag' }}   # only on tag
     steps:
+
       - name: Download artifacts linux-linux-ninja
         uses: actions/download-artifact@v4
         with:
