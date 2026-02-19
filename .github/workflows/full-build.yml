@@ -321,16 +321,16 @@ jobs:
       uses: robinraju/release-downloader@v1.10
       with:
         repository: cscosine/3rdPartyBaseLibs
-        tag: v0.1.0-rc1
-        fileName: bundle-3rdPartyBaseLibs-v0.1.0-rc1-eigen3-linux-linux-ninja.zip
+        tag: v0.1.0-rc2
+        fileName: bundle-3rdPartyBaseLibs-v0.1.0-rc2-eigen3-linux-linux-ninja.tar.gz
         out-file-path: libs/linux-ninja
         token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
     - name: Extract eigen3 bundle (linux/linux-ninja)
       shell: bash
       run: |
-        unzip -o libs/linux-ninja/*.zip -d libs/linux-ninja
-        rm -f libs/linux-ninja/*.zip
+        tar -xzf libs/linux-ninja/bundle-3rdPartyBaseLibs-v0.1.0-rc2-eigen3-linux-linux-ninja.tar.gz -C libs/linux-ninja
+        rm -f libs/linux-ninja/bundle-3rdPartyBaseLibs-v0.1.0-rc2-eigen3-linux-linux-ninja.tar.gz
 
 
     # ---------------------------------------------------
@@ -357,6 +357,7 @@ jobs:
       working-directory: opencv
 
     - name: Upload build log
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: opencv-linux-linux-ninja-1-build_output.log
@@ -372,6 +373,7 @@ jobs:
       working-directory: opencv
 
     - name: Upload build log
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: opencv-linux-linux-ninja-2-build_output.log
@@ -399,7 +401,7 @@ jobs:
 
         (
           cd install/linux-ninja/
-          zip -r "$GITHUB_WORKSPACE/bundle-csOpenCV-${VERSION}-opencv-linux-linux-ninja.zip" opencv
+          tar -czf "$GITHUB_WORKSPACE/bundle-csOpenCV-${VERSION}-opencv-linux-linux-ninja.tar.gz" opencv
         )
       shell: bash
     # ---------------------------------------------------
@@ -412,7 +414,7 @@ jobs:
         name: linux-linux-ninja
         if-no-files-found: error
         path: |
-          bundle-csOpenCV-${{ env.VERSION }}-opencv-linux-linux-ninja.zip
+          bundle-csOpenCV-${{ env.VERSION }}-opencv-linux-linux-ninja.tar.gz
     # ---------------------------------------------------
 
   build-linux-linux-ninja-multi-config-clang:
@@ -473,16 +475,16 @@ jobs:
       uses: robinraju/release-downloader@v1.10
       with:
         repository: cscosine/3rdPartyBaseLibs
-        tag: v0.1.0-rc1
-        fileName: bundle-3rdPartyBaseLibs-v0.1.0-rc1-eigen3-linux-linux-ninja-multi-config-clang.zip
+        tag: v0.1.0-rc2
+        fileName: bundle-3rdPartyBaseLibs-v0.1.0-rc2-eigen3-linux-linux-ninja-multi-config-clang.tar.gz
         out-file-path: libs/linux-ninja-multi-config-clang
         token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
     - name: Extract eigen3 bundle (linux/linux-ninja-multi-config-clang)
       shell: bash
       run: |
-        unzip -o libs/linux-ninja-multi-config-clang/*.zip -d libs/linux-ninja-multi-config-clang
-        rm -f libs/linux-ninja-multi-config-clang/*.zip
+        tar -xzf libs/linux-ninja-multi-config-clang/bundle-3rdPartyBaseLibs-v0.1.0-rc2-eigen3-linux-linux-ninja-multi-config-clang.tar.gz -C libs/linux-ninja-multi-config-clang
+        rm -f libs/linux-ninja-multi-config-clang/bundle-3rdPartyBaseLibs-v0.1.0-rc2-eigen3-linux-linux-ninja-multi-config-clang.tar.gz
 
     # ---------------------------------------------------
 
@@ -508,6 +510,7 @@ jobs:
       working-directory: opencv
 
     - name: Upload build log
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: opencv-linux-linux-ninja-multi-config-clang-1-build_output.log
@@ -535,7 +538,7 @@ jobs:
 
         (
           cd install/linux-ninja-multi-config-clang/
-          zip -r "$GITHUB_WORKSPACE/bundle-csOpenCV-${VERSION}-opencv-linux-linux-ninja-multi-config-clang.zip" opencv
+          tar -czf "$GITHUB_WORKSPACE/bundle-csOpenCV-${VERSION}-opencv-linux-linux-ninja-multi-config-clang.tar.gz" opencv
         )
       shell: bash
     # ---------------------------------------------------
@@ -548,7 +551,7 @@ jobs:
         name: linux-linux-ninja-multi-config-clang
         if-no-files-found: error
         path: |
-          bundle-csOpenCV-${{ env.VERSION }}-opencv-linux-linux-ninja-multi-config-clang.zip
+          bundle-csOpenCV-${{ env.VERSION }}-opencv-linux-linux-ninja-multi-config-clang.tar.gz
     # ---------------------------------------------------
 
   build-windows-msvc2022-x64:
@@ -601,16 +604,16 @@ jobs:
       uses: robinraju/release-downloader@v1.10
       with:
         repository: cscosine/3rdPartyBaseLibs
-        tag: v0.1.0-rc1
-        fileName: bundle-3rdPartyBaseLibs-v0.1.0-rc1-eigen3-windows-msvc2022-x64.zip
+        tag: v0.1.0-rc2
+        fileName: bundle-3rdPartyBaseLibs-v0.1.0-rc2-eigen3-windows-msvc2022-x64.zip
         out-file-path: libs/msvc2022-x64
         token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
     - name: Extract eigen3 bundle (windows/msvc2022-x64)
       shell: pwsh
       run: |
-        Expand-Archive -Path "libs/msvc2022-x64\*.zip" -DestinationPath "libs/msvc2022-x64" -Force
-        Remove-Item -Path "libs/msvc2022-x64\*.zip" -Force
+        Expand-Archive -Path "libs/msvc2022-x64\bundle-3rdPartyBaseLibs-v0.1.0-rc2-eigen3-windows-msvc2022-x64.zip" -DestinationPath "libs/msvc2022-x64" -Force
+        Remove-Item -Path "libs/msvc2022-x64\bundle-3rdPartyBaseLibs-v0.1.0-rc2-eigen3-windows-msvc2022-x64.zip" -Force
 
 
     # ---------------------------------------------------
@@ -649,6 +652,7 @@ jobs:
       working-directory: opencv
 
     - name: Upload build log
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: opencv-windows-msvc2022-x64-1-build_output.log
@@ -757,16 +761,16 @@ jobs:
       uses: robinraju/release-downloader@v1.10
       with:
         repository: cscosine/3rdPartyBaseLibs
-        tag: v0.1.0-rc1
-        fileName: bundle-3rdPartyBaseLibs-v0.1.0-rc1-eigen3-windows-msvc2022-x64-LLVM.zip
+        tag: v0.1.0-rc2
+        fileName: bundle-3rdPartyBaseLibs-v0.1.0-rc2-eigen3-windows-msvc2022-x64-LLVM.zip
         out-file-path: libs/msvc2022-x64-LLVM
         token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
     - name: Extract eigen3 bundle (windows/msvc2022-x64-LLVM)
       shell: pwsh
       run: |
-        Expand-Archive -Path "libs/msvc2022-x64-LLVM\*.zip" -DestinationPath "libs/msvc2022-x64-LLVM" -Force
-        Remove-Item -Path "libs/msvc2022-x64-LLVM\*.zip" -Force
+        Expand-Archive -Path "libs/msvc2022-x64-LLVM\bundle-3rdPartyBaseLibs-v0.1.0-rc2-eigen3-windows-msvc2022-x64-LLVM.zip" -DestinationPath "libs/msvc2022-x64-LLVM" -Force
+        Remove-Item -Path "libs/msvc2022-x64-LLVM\bundle-3rdPartyBaseLibs-v0.1.0-rc2-eigen3-windows-msvc2022-x64-LLVM.zip" -Force
 
     # ---------------------------------------------------
 
@@ -804,6 +808,7 @@ jobs:
       working-directory: opencv
 
     - name: Upload build log
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: opencv-windows-msvc2022-x64-LLVM-1-build_output.log
@@ -901,8 +906,8 @@ jobs:
           name: Release ${{ github.ref_name }}
           fail_on_unmatched_files: true
           files: |
-            linux-linux-ninja/*.zip
-            linux-linux-ninja-multi-config-clang/*.zip
+            linux-linux-ninja/*.tar.gz
+            linux-linux-ninja-multi-config-clang/*.tar.gz
             windows-msvc2022-x64/*.zip
             windows-msvc2022-x64-LLVM/*.zip
         env:
