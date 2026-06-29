@@ -1,6 +1,0 @@
-[metaproject-autogenerate]
-project = true
-gitignore = true
-gitattributes = true
-pre_commit_config = true
-readme = true
