@@ -35,7 +35,10 @@ from csorchestrator.frontend.step.step_upload_artifacts import (
     StepUploadArtifacts,
     create_artifact_prefix_from_orchestrator_name_version,
 )
-from csorchestrator.frontend.step.step_custom_command import StepInstallAptPackages
+from csorchestrator.frontend.step.step_custom_command import (
+    StepBashScriptCommand,
+    StepInstallAptPackages,
+)
 from csorchestrator.frontend.step.step_get_precompiled_lib_github import (
     StepGetPrecompiledLibGithub,
 )
@@ -113,28 +116,46 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
 
     # ----------------------------------------------------------------
     p = o.create_phase("Install Requirements (Linux-Ubuntu)")
+
+    p.add_step(
+        StepBashScriptCommand(
+            name="set non interactive installer",
+            description="install apt packages if not already installed in the system",
+            cmd=[
+                "# Pre-accept the Microsoft Core Fonts EULA so installation can run non-interactively.",
+                "sudo apt update",
+                'echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections',
+                "sudo DEBIAN_FRONTEND=noninteractive apt install -y ttf-mscorefonts-installer",
+            ],
+        )
+        .add_extra(StepExecuteOnlyOncePerMatrix())
+        .add_extra(
+            StepExecuteOnlyOn(os=OS.LINUX, version_starts_with=UBUNTU_STRING_PREFIX)
+        )
+    )
+
     p.add_step(
         StepInstallAptPackages(
             name="install apt packages",
             description="install apt packages if not already installed in the system",
             packages=[
-                "libgstreamer-plugins-base1.0-dev",
-                "libgtk2.0-dev",
                 "gstreamer1.0*",
-                "libswscale-dev",
-                "libtbb-dev",
-                "python3-numpy",
-                "libtbb12",
-                "libpng-dev",
-                "python3-pip",
-                "libavcodec-dev",
-                "python3-dev",
-                "ubuntu-restricted-extras",
-                "pkg-config",
                 "libavformat-dev",
-                "libdc1394-dev",
-                "libjpeg-dev",
+                "libpng-dev",
+                "python3-numpy",
                 "libtiff-dev",
+                "libgstreamer-plugins-base1.0-dev",
+                "libavcodec-dev",
+                "libdc1394-dev",
+                "pkg-config",
+                "ubuntu-restricted-extras",
+                "libtbb-dev",
+                "python3-pip",
+                "libswscale-dev",
+                "python3-dev",
+                "libgtk2.0-dev",
+                "libtbb12",
+                "libjpeg-dev",
                 "libgstreamer1.0-dev",
             ],
             dry_run=False,

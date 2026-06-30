@@ -225,6 +225,59 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
+      - name: Run command set non interactive installer
+        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu') }}
+        shell: bash
+        run: |
+          # Pre-accept the Microsoft Core Fonts EULA so installation can run non-interactively.
+          sudo apt update
+          echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
+          sudo DEBIAN_FRONTEND=noninteractive apt install -y ttf-mscorefonts-installer
+
+      - name: Run command install apt packages
+        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu') }}
+        shell: bash
+        run: |
+          set -euo pipefail # enable strict mode
+
+
+          packages=(
+            gstreamer1.0*
+            libavformat-dev
+            libpng-dev
+            python3-numpy
+            libtiff-dev
+            libgstreamer-plugins-base1.0-dev
+            libavcodec-dev
+            libdc1394-dev
+            pkg-config
+            ubuntu-restricted-extras
+            libtbb-dev
+            python3-pip
+            libswscale-dev
+            python3-dev
+            libgtk2.0-dev
+            libtbb12
+            libjpeg-dev
+            libgstreamer1.0-dev
+          )
+
+          missing=()
+
+          for pkg in "${packages[@]}"; do
+            dpkg -s "$pkg" &>/dev/null || missing+=("$pkg")
+          done
+
+          if [ ${#missing[@]} -ne 0 ]; then
+
+            sudo apt update
+
+            echo "Need to install missing packages: ${missing[*]}"
+            sudo apt install -y "${missing[@]}"
+          else
+            echo "All packages already installed."
+          fi
+
       - name: Get Precompiled Lib eigen3 from 3rdPartyBaseLibs prepare filename
         id: filename_3rdPartyBaseLibs_eigen3
         shell: python

@@ -21,5 +21,10 @@ packages_list = [
 
 packages_list_unique = set(sorted(packages_list))
 for i in packages_list_unique:
-    # print(f'"{i}",')
     print(f"{i} ", end="")
+print("")
+print("")
+print("")
+
+for i in packages_list_unique:
+    print(f'"{i}",')
