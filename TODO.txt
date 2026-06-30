@@ -1,0 +1,5 @@
+links
+-----
+https://developer.ridgerun.com/wiki/index.php/Compiling_OpenCV_from_Source
+https://docs.opencv.org/4.13.0/db/d05/tutorial_config_reference.html
+https://gist.github.com/minhhieutruong0705/8f0ec70c400420e0007c15c98510f133
