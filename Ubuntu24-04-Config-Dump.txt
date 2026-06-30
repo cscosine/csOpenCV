@@ -1,5 +1,4 @@
 Preset CMake variables:
-
   BUILD_EXAMPLES="OFF"
   BUILD_JAVA="OFF"
   BUILD_PERF_TESTS="OFF"
@@ -9,21 +8,18 @@ Preset CMake variables:
   CMAKE_BUILD_TYPE="Debug"
   CMAKE_CXX_COMPILER="g++"
   CMAKE_C_COMPILER="gcc"
-  CMAKE_INSTALL_PREFIX:PATH="/home/runner/work/csOpenCV/csOpenCV/workspace/install/csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja/opencv"
+  CMAKE_INSTALL_PREFIX:PATH="/home/runner/work/csOpenCV/csOpenCV/workspace/install/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv"
   CMAKE_MODULE_PATH="/home/runner/work/csOpenCV/csOpenCV/workspace/csCMake"
-  CMAKE_PREFIX_PATH="/home/runner/work/csOpenCV/csOpenCV/workspace/install/csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja;/home/runner/work/csOpenCV/csOpenCV/workspace/libs/csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja"
+  CMAKE_PREFIX_PATH="/home/runner/work/csOpenCV/csOpenCV/workspace/install/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja;/home/runner/work/csOpenCV/csOpenCV/workspace/libs/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja"
   OPENCV_EXTRA_MODULES_PATH="/home/runner/work/csOpenCV/csOpenCV/workspace/opencv/../opencv_contrib/modules"
   OPENCV_GENERATE_PKGCONFIG="OFF"
-
 Preset environment variables:
-
   CS_CMAKE_CSV1_SINGLE_CONFIG_SUB_DIR="debug"
-  CS_CMAKE_CSV1_SUB_DIR="csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja"
-  CS_CMAKE_CSV1_SUB_DIR_SHORT="v1lu22.04x64ggdn"
+  CS_CMAKE_CSV1_SUB_DIR="csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja"
+  CS_CMAKE_CSV1_SUB_DIR_SHORT="v1lu24.04x64ggdn"
   CS_CMAKE_ROOT="/home/runner/work/csOpenCV/csOpenCV/workspace/csCMake"
-
--- The CXX compiler identification is GNU 11.4.0
--- The C compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 13.3.0
+-- The C compiler identification is GNU 13.3.0
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
 -- Check for working CXX compiler: /usr/bin/g++ - skipped
@@ -39,11 +35,8 @@ Preset environment variables:
 -- The ASM compiler identification is GNU
 -- Found assembler: /usr/bin/cc
 -- Detected processor: x86_64
--- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.12", minimum required is "3.2")
--- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.10.so (found suitable exact version "3.10.12")
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-ModuleNotFoundError: No module named 'numpy'
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.12.3", minimum required is "3.2")
+-- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.12.so (found suitable exact version "3.12.3")
 -- Looking for ccache - not found
 -- Performing Test HAVE_CXX_FSIGNED_CHAR
 -- Performing Test HAVE_CXX_FSIGNED_CHAR - Success
@@ -229,129 +222,87 @@ ModuleNotFoundError: No module named 'numpy'
 -- Looking for getauxval - found
 -- Looking for elf_aux_info
 -- Looking for elf_aux_info - not found
--- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found suitable version "1.2.11", minimum required is "1.2.3")
+-- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found suitable version "1.3", minimum required is "1.2.3")
 -- Could NOT find AVIF (missing: AVIF_LIBRARY AVIF_INCLUDE_DIR)
 -- Found JPEG: /usr/lib/x86_64-linux-gnu/libjpeg.so (found version "80")
--- Found TIFF: /usr/lib/x86_64-linux-gnu/libtiff.so (found version "4.3.0")
--- Performing Test HAVE_C_WNO_UNUSED_VARIABLE
--- Performing Test HAVE_C_WNO_UNUSED_VARIABLE - Success
--- Performing Test HAVE_C_WNO_UNUSED_FUNCTION
--- Performing Test HAVE_C_WNO_UNUSED_FUNCTION - Success
--- Performing Test HAVE_C_WNO_SHADOW
--- Performing Test HAVE_C_WNO_SHADOW - Success
--- Performing Test HAVE_C_WNO_MAYBE_UNINITIALIZED
--- Performing Test HAVE_C_WNO_MAYBE_UNINITIALIZED - Success
+-- Found TIFF: /usr/lib/x86_64-linux-gnu/libtiff.so (found version "4.5.1")
+-- Found WebP: /usr/lib/x86_64-linux-gnu/libwebp.so
+-- Could NOT find OpenJPEG (minimal suitable version: 2.0, recommended version >= 2.3.1). OpenJPEG will be built from sources
+-- Performing Test HAVE_C_WNO_IMPLICIT_CONST_INT_FLOAT_CONVERSION
+-- Performing Test HAVE_C_WNO_IMPLICIT_CONST_INT_FLOAT_CONVERSION - Failed
+-- Performing Test HAVE_C_WNO_UNUSED_BUT_SET_VARIABLE
+-- Performing Test HAVE_C_WNO_UNUSED_BUT_SET_VARIABLE - Success
 -- Performing Test HAVE_C_WNO_MISSING_PROTOTYPES
 -- Performing Test HAVE_C_WNO_MISSING_PROTOTYPES - Success
 -- Performing Test HAVE_C_WNO_MISSING_DECLARATIONS
 -- Performing Test HAVE_C_WNO_MISSING_DECLARATIONS - Success
--- Performing Test HAVE_C_WNO_IMPLICIT_FALLTHROUGH
--- Performing Test HAVE_C_WNO_IMPLICIT_FALLTHROUGH - Success
--- Performing Test HAVE_C_WNO_UNUSED_BUT_SET_VARIABLE
--- Performing Test HAVE_C_WNO_UNUSED_BUT_SET_VARIABLE - Success
--- The imported target "openjpip" references the file
-   "/usr/lib/x86_64-linux-gnu/libopenjpip.so.2.4.0"
-but this file does not exist.  Possible reasons include:
-* The file was deleted, renamed, or moved to another location.
-* An install or uninstall procedure did not complete successfully.
-* The installation package was faulty and contained
-   "/usr/lib/x86_64-linux-gnu/openjpeg-2.1/OpenJPEGTargets.cmake"
-but not all the files it references.
-
--- The imported target "opj_decompress" references the file
-   "/usr/bin/opj_decompress"
-but this file does not exist.  Possible reasons include:
-* The file was deleted, renamed, or moved to another location.
-* An install or uninstall procedure did not complete successfully.
-* The installation package was faulty and contained
-   "/usr/lib/x86_64-linux-gnu/openjpeg-2.1/OpenJPEGTargets.cmake"
-but not all the files it references.
-
--- The imported target "opj_compress" references the file
-   "/usr/bin/opj_compress"
-but this file does not exist.  Possible reasons include:
-* The file was deleted, renamed, or moved to another location.
-* An install or uninstall procedure did not complete successfully.
-* The installation package was faulty and contained
-   "/usr/lib/x86_64-linux-gnu/openjpeg-2.1/OpenJPEGTargets.cmake"
-but not all the files it references.
-
--- The imported target "opj_dump" references the file
-   "/usr/bin/opj_dump"
-but this file does not exist.  Possible reasons include:
-* The file was deleted, renamed, or moved to another location.
-* An install or uninstall procedure did not complete successfully.
-* The installation package was faulty and contained
-   "/usr/lib/x86_64-linux-gnu/openjpeg-2.1/OpenJPEGTargets.cmake"
-but not all the files it references.
-
--- The imported target "opj_jpip_addxml" references the file
-   "/usr/bin/opj_jpip_addxml"
-but this file does not exist.  Possible reasons include:
-* The file was deleted, renamed, or moved to another location.
-* An install or uninstall procedure did not complete successfully.
-* The installation package was faulty and contained
-   "/usr/lib/x86_64-linux-gnu/openjpeg-2.1/OpenJPEGTargets.cmake"
-but not all the files it references.
-
--- The imported target "opj_server" references the file
-   "/usr/bin/opj_server"
-but this file does not exist.  Possible reasons include:
-* The file was deleted, renamed, or moved to another location.
-* An install or uninstall procedure did not complete successfully.
-* The installation package was faulty and contained
-   "/usr/lib/x86_64-linux-gnu/openjpeg-2.1/OpenJPEGTargets.cmake"
-but not all the files it references.
-
--- The imported target "opj_dec_server" references the file
-   "/usr/bin/opj_dec_server"
-but this file does not exist.  Possible reasons include:
-* The file was deleted, renamed, or moved to another location.
-* An install or uninstall procedure did not complete successfully.
-* The installation package was faulty and contained
-   "/usr/lib/x86_64-linux-gnu/openjpeg-2.1/OpenJPEGTargets.cmake"
-but not all the files it references.
-
--- The imported target "opj_jpip_transcode" references the file
-   "/usr/bin/opj_jpip_transcode"
-but this file does not exist.  Possible reasons include:
-* The file was deleted, renamed, or moved to another location.
-* An install or uninstall procedure did not complete successfully.
-* The installation package was faulty and contained
-   "/usr/lib/x86_64-linux-gnu/openjpeg-2.1/OpenJPEGTargets.cmake"
-but not all the files it references.
-
--- The imported target "opj_jpip_test" references the file
-   "/usr/bin/opj_jpip_test"
-but this file does not exist.  Possible reasons include:
-* The file was deleted, renamed, or moved to another location.
-* An install or uninstall procedure did not complete successfully.
-* The installation package was faulty and contained
-   "/usr/lib/x86_64-linux-gnu/openjpeg-2.1/OpenJPEGTargets.cmake"
-but not all the files it references.
-
--- Found system OpenJPEG: openjp2 (found version "2.4.0")
--- Found OpenEXR: /usr/lib/x86_64-linux-gnu/libIlmImf-2_5.so
+-- Performing Test HAVE_C_WNO_DOCUMENTATION
+-- Performing Test HAVE_C_WNO_DOCUMENTATION - Failed
+-- OpenJPEG: VERSION = 2.5.3, BUILD = opencv-5.0.0-openjp2-2.5.3-debug
+-- Looking for string.h
+-- Looking for string.h - found
+-- Looking for memory.h
+-- Looking for memory.h - found
+-- Looking for stdlib.h
+-- Looking for stdlib.h - found
+-- Looking for stdio.h
+-- Looking for stdio.h - found
+-- Looking for math.h
+-- Looking for math.h - found
+-- Looking for float.h
+-- Looking for float.h - found
+-- Looking for time.h
+-- Looking for time.h - found
+-- Looking for stdarg.h
+-- Looking for stdarg.h - found
+-- Looking for ctype.h
+-- Looking for ctype.h - found
+-- Looking for assert.h
+-- Looking for assert.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for inttypes.h
+-- Looking for inttypes.h - found
+-- Looking for strings.h
+-- Looking for strings.h - found
+-- Looking for sys/stat.h
+-- Looking for sys/stat.h - found
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for unistd.h
+-- Looking for unistd.h - found
+-- Looking for include file malloc.h
+-- Looking for include file malloc.h - found
+-- Looking for _aligned_malloc
+-- Looking for _aligned_malloc - not found
+-- Looking for posix_memalign
+-- Looking for posix_memalign - found
+-- Looking for memalign
+-- Looking for memalign - found
+-- Performing Test HAVE_C_WNO_UNDEF
+-- Performing Test HAVE_C_WNO_UNDEF - Success
+-- Performing Test HAVE_C_WNO_STRICT_PROTOTYPES
+-- Performing Test HAVE_C_WNO_STRICT_PROTOTYPES - Success
+-- Performing Test HAVE_C_WNO_CAST_FUNCTION_TYPE
+-- Performing Test HAVE_C_WNO_CAST_FUNCTION_TYPE - Success
+-- Performing Test HAVE_C_WNO_SHADOW
+-- Performing Test HAVE_C_WNO_SHADOW - Success
+-- Performing Test HAVE_C_WNO_UNUSED_FUNCTION
+-- Performing Test HAVE_C_WNO_UNUSED_FUNCTION - Success
+-- OpenJPEG libraries will be built from sources: libopenjp2 (version "2.5.3")
 -- libva: missing va.h header (VA_INCLUDE_DIR)
 -- IPPICV: Downloading ippicv_2026.0.0_lnx_intel64_20260327_general.tgz from https://raw.githubusercontent.com/opencv/opencv_3rdparty/406d398c436d0465c8e53dd432d9ecd9301d5f4a/ippicv/ippicv_2026.0.0_lnx_intel64_20260327_general.tgz
 -- found Intel IPP (ICV version): 2026.0.0 [2026.0.0]
--- at: /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/icv
+-- at: /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/icv
 -- found Intel IPP Integration Wrappers sources: 2026.0.0
--- at: /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/iw
--- Could NOT find Atlas (missing: Atlas_CLAPACK_INCLUDE_DIR Atlas_CBLAS_LIBRARY Atlas_BLAS_LIBRARY)
+-- at: /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/iw
+-- Could NOT find Atlas (missing: Atlas_CBLAS_INCLUDE_DIR Atlas_CLAPACK_INCLUDE_DIR Atlas_CBLAS_LIBRARY Atlas_BLAS_LIBRARY Atlas_LAPACK_LIBRARY)
 -- Looking for sgemm_
 -- Looking for sgemm_ - not found
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
 -- Found Threads: TRUE
--- Looking for sgemm_
--- Looking for sgemm_ - found
--- Found BLAS: /usr/lib/x86_64-linux-gnu/libblas.so
--- Looking for cheev_
--- Looking for cheev_ - not found
--- Looking for cheev_
--- Looking for cheev_ - found
--- Found LAPACK: /usr/lib/x86_64-linux-gnu/liblapack.so;/usr/lib/x86_64-linux-gnu/libblas.so
+-- Could NOT find BLAS (missing: BLAS_LIBRARIES)
+-- Could NOT find LAPACK (missing: LAPACK_LIBRARIES)
+    Reason given by package: LAPACK could not be found because dependency BLAS could not be found.
 -- Lapack not found - fallback to built-in
 -- Performing Test HAVE_C_WNO_PARENTHESES
 -- Performing Test HAVE_C_WNO_PARENTHESES - Success
@@ -426,41 +377,40 @@ but not all the files it references.
 -- VTK is not found. Please set -DVTK_DIR in CMake to VTK build directory, or to VTK install subdirectory with VTKConfig.cmake file
 -- Looking for dlerror in dl
 -- Looking for dlerror in dl - found
--- Performing Test HAVE_C_WNO_UNDEF
--- Performing Test HAVE_C_WNO_UNDEF - Success
+-- Performing Test HAVE_C_WNO_IMPLICIT_FALLTHROUGH
+-- Performing Test HAVE_C_WNO_IMPLICIT_FALLTHROUGH - Success
 -- Performing Test HAVE_C_WNO_SIGN_COMPARE
 -- Performing Test HAVE_C_WNO_SIGN_COMPARE - Success
--- Performing Test HAVE_C_WNO_STRICT_PROTOTYPES
--- Performing Test HAVE_C_WNO_STRICT_PROTOTYPES - Success
 -- Checking for module 'gtk+-3.0'
 --   Package 'gtk+-3.0', required by 'virtual:world', not found
 -- Checking for module 'gtk+-2.0'
---   Package 'gtk+-2.0', required by 'virtual:world', not found
+--   Found gtk+-2.0, version 2.24.33
 -- Checking for modules 'libavcodec;libavformat;libavutil;libswscale'
---   Package 'libavcodec', required by 'virtual:world', not found
---   Package 'libavformat', required by 'virtual:world', not found
---   Package 'libavutil', required by 'virtual:world', not found
---   Package 'libswscale', required by 'virtual:world', not found
--- FFMPEG is disabled. Required libraries: libavcodec;libavformat;libavutil;libswscale. Missing libraries: libavcodec;libavformat;libavutil;libswscale
+--   Found libavcodec, version 60.31.102
+--   Found libavformat, version 60.16.100
+--   Found libavutil, version 58.29.100
+--   Found libswscale, version 7.5.100
+-- Checking for module 'libavdevice'
+--   Package 'libavdevice', required by 'virtual:world', not found
 -- Checking for module 'gstreamer-base-1.0'
---   Package 'gstreamer-base-1.0', required by 'virtual:world', not found
+--   Found gstreamer-base-1.0, version 1.24.2
 -- Checking for module 'gstreamer-app-1.0'
---   Package 'gstreamer-app-1.0', required by 'virtual:world', not found
+--   Found gstreamer-app-1.0, version 1.24.2
 -- Checking for module 'gstreamer-riff-1.0'
---   Package 'gstreamer-riff-1.0', required by 'virtual:world', not found
+--   Found gstreamer-riff-1.0, version 1.24.2
 -- Checking for module 'gstreamer-pbutils-1.0'
---   Package 'gstreamer-pbutils-1.0', required by 'virtual:world', not found
+--   Found gstreamer-pbutils-1.0, version 1.24.2
 -- Checking for module 'gstreamer-video-1.0'
---   Package 'gstreamer-video-1.0', required by 'virtual:world', not found
+--   Found gstreamer-video-1.0, version 1.24.2
 -- Checking for module 'gstreamer-audio-1.0'
---   Package 'gstreamer-audio-1.0', required by 'virtual:world', not found
+--   Found gstreamer-audio-1.0, version 1.24.2
 -- HAVE_FASTCV status
 -- Checking for module 'freetype2'
---   Found freetype2, version 24.1.18
+--   Found freetype2, version 26.1.20
 -- Checking for module 'harfbuzz'
---   Package 'harfbuzz', required by 'virtual:world', not found
--- freetype2:   YES (ver 24.1.18)
--- harfbuzz:    NO
+--   Found harfbuzz, version 8.3.0
+-- freetype2:   YES (ver 26.1.20)
+-- harfbuzz:    YES (ver 8.3.0)
 -- ADE: Downloading v0.1.2e.zip from https://github.com/opencv/ade/archive/v0.1.2e.zip
 -- Could NOT find HDF5 (missing: HDF5_LIBRARIES HDF5_INCLUDE_DIRS)
 -- Julia not found. Not compiling Julia Bindings.
@@ -530,9 +480,14 @@ but not all the files it references.
 -- xfeatures2d/vgg: Downloading vgg_generated_80.i from https://raw.githubusercontent.com/opencv/opencv_3rdparty/fccf7cd6a4b12079f73bbfb21745f9babcd4eb1d/vgg_generated_80.i
 -- xfeatures2d/vgg: Downloading vgg_generated_120.i from https://raw.githubusercontent.com/opencv/opencv_3rdparty/fccf7cd6a4b12079f73bbfb21745f9babcd4eb1d/vgg_generated_120.i
 -- data: Downloading face_landmark_model.dat from https://raw.githubusercontent.com/opencv/opencv_3rdparty/8afa57abc8229d611c4937165d20e2a2d9fc5a12/face_landmark_model.dat
--- highgui: using builtin backend: NONE
--- Use autogenerated whitelist /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja/opencv/debug/modules/js_bindings_generator/whitelist.json
+-- highgui: using builtin backend: GTK2
+-- Use autogenerated whitelist /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv/debug/modules/js_bindings_generator/whitelist.json
 -- Set Cleaners to False
+-- Found 'misc' Python modules from /home/runner/work/csOpenCV/csOpenCV/workspace/opencv/modules/python/package/extra_modules
+-- Found 'mat_wrapper;utils' Python modules from /home/runner/work/csOpenCV/csOpenCV/workspace/opencv/modules/core/misc/python/package
+-- Found 'gapi' Python modules from /home/runner/work/csOpenCV/csOpenCV/workspace/opencv_contrib/modules/gapi/misc/python/package
+-- Performing Test HAVE_CXX_WNO_UNUSED_PRIVATE_FIELD
+-- Performing Test HAVE_CXX_WNO_UNUSED_PRIVATE_FIELD - Failed
 -- Found 'misc' Python modules from /home/runner/work/csOpenCV/csOpenCV/workspace/opencv/modules/python/package/extra_modules
 -- Found 'mat_wrapper;utils' Python modules from /home/runner/work/csOpenCV/csOpenCV/workspace/opencv/modules/core/misc/python/package
 -- Found 'gapi' Python modules from /home/runner/work/csOpenCV/csOpenCV/workspace/opencv_contrib/modules/gapi/misc/python/package
@@ -545,8 +500,8 @@ but not all the files it references.
 --     Version control (extra):     755e506
 --
 --   Platform:
---     Timestamp:                   2026-06-29T22:54:37Z
---     Host:                        Linux 6.8.0-1059-azure x86_64
+--     Timestamp:                   2026-06-30T23:49:08Z
+--     Host:                        Linux 6.17.0-1018-azure x86_64
 --     CMake:                       3.31.6
 --     CMake generator:             Ninja
 --     CMake build tool:            /usr/local/bin/ninja
@@ -567,7 +522,7 @@ but not all the files it references.
 --   C/C++:
 --     Built as dynamic libs?:      YES
 --     C++ standard:                17
---     C++ Compiler:                /usr/bin/g++  (ver 11.4.0)
+--     C++ Compiler:                /usr/bin/g++  (ver 13.3.0)
 --     C++ flags (Release):         -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections  -msse3 -fvisibility=hidden -fvisibility-inlines-hidden -O3 -DNDEBUG  -DNDEBUG
 --     C++ flags (Debug):           -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections  -msse3 -fvisibility=hidden -fvisibility-inlines-hidden -g  -O0 -DDEBUG -D_DEBUG
 --     C Compiler:                  /usr/bin/gcc
@@ -581,29 +536,30 @@ but not all the files it references.
 --     3rdparty dependencies:
 --
 --   OpenCV modules:
---     To be built:                 alphamat bgsegm bioinspired calib ccalib core datasets dnn dnn_objdetect dnn_superres dpm face features flann fuzzy gapi geometry hfs highgui img_hash imgcodecs imgproc intensity_transform line_descriptor ml objdetect optflow phase_unwrapping photo plot ptcloud quality rapid reg rgbd saliency shape signal stereo stitching structured_light superres surface_matching text tracking video videoio videostab wechat_qrcode xfeatures2d ximgproc xobjdetect xphoto xstereo
+--     To be built:                 alphamat bgsegm bioinspired calib ccalib core datasets dnn dnn_objdetect dnn_superres dpm face features flann freetype fuzzy gapi geometry hfs highgui img_hash imgcodecs imgproc intensity_transform line_descriptor ml objdetect optflow phase_unwrapping photo plot ptcloud python3 quality rapid reg rgbd saliency shape signal stereo stitching structured_light superres surface_matching text tracking video videoio videostab wechat_qrcode xfeatures2d ximgproc xobjdetect xphoto xstereo
 --     Disabled:                    world
 --     Disabled by dependency:      -
---     Unavailable:                 cannops cudaarithm cudabgsegm cudacodec cudafeatures2d cudafilters cudaimgproc cudalegacy cudaobjdetect cudaoptflow cudastereo cudawarping cudev cvv fastcv freetype hdf java julia matlab ovis python3 sfm ts viz
+--     Unavailable:                 cannops cudaarithm cudabgsegm cudacodec cudafeatures2d cudafilters cudaimgproc cudalegacy cudaobjdetect cudaoptflow cudastereo cudawarping cudev cvv fastcv hdf java julia matlab ovis sfm ts viz
 --     Applications:                -
 --     Documentation:               NO
 --     Non-free algorithms:         NO
 --
---   GUI:                           NONE
---     GTK+:                        NO
+--   GUI:                           GTK2
+--     GTK+:                        YES (ver 2.24.33)
+--       GtkGlExt:                  NO
 --     VTK support:                 NO
 --     Built-in Unicode font:       YES
 --
 --   Media I/O:
---     ZLib:                        /usr/lib/x86_64-linux-gnu/libz.so (ver 1.2.11)
+--     ZLib:                        /usr/lib/x86_64-linux-gnu/libz.so (ver 1.3)
 --     JPEG:                        /usr/lib/x86_64-linux-gnu/libjpeg.so (ver 80)
---     WEBP:                        build (ver decoder: 0x0210, encoder: 0x0210, demux: 0x0107)
+--     WEBP:                        /usr/lib/x86_64-linux-gnu/libwebp.so (ver decoder: 0x0209, encoder: 0x020f, demux: 0x0107)
 --     AVIF:                        NO
---     PNG:                         /usr/lib/x86_64-linux-gnu/libpng.so (ver 1.6.37)
+--     PNG:                         /usr/lib/x86_64-linux-gnu/libpng.so (ver 1.6.43)
 --       Metadata Support:          EXIF XMP ICC
---     TIFF:                        /usr/lib/x86_64-linux-gnu/libtiff.so (ver 42 / 4.3.0)
---     JPEG 2000:                   OpenJPEG (ver 2.4.0)
---     OpenEXR:                     /usr/lib/x86_64-linux-gnu/libImath-2_5.so /usr/lib/x86_64-linux-gnu/libIlmImf-2_5.so /usr/lib/x86_64-linux-gnu/libIex-2_5.so /usr/lib/x86_64-linux-gnu/libHalf-2_5.so /usr/lib/x86_64-linux-gnu/libIlmThread-2_5.so (ver 2.5.7)
+--     TIFF:                        /usr/lib/x86_64-linux-gnu/libtiff.so (ver 42 / 4.5.1)
+--     JPEG 2000:                   build (ver 2.5.3)
+--     OpenEXR:                     NO
 --     GIF:                         YES
 --     HDR:                         YES
 --     SUNRASTER:                   YES
@@ -611,13 +567,13 @@ but not all the files it references.
 --     PFM:                         YES
 --
 --   Video I/O:
---     FFMPEG:                      NO
---       avcodec:                   NO
---       avformat:                  NO
---       avutil:                    NO
---       swscale:                   NO
+--     FFMPEG:                      YES
+--       avcodec:                   YES (60.31.102)
+--       avformat:                  YES (60.16.100)
+--       avutil:                    YES (58.29.100)
+--       swscale:                   YES (7.5.100)
 --       avdevice:                  NO
---     GStreamer:                   NO
+--     GStreamer:                   YES (1.24.2)
 --     v4l/v4l2:                    YES (linux/videodev2.h)
 --     Orbbec:                      YES
 --
@@ -627,9 +583,9 @@ but not all the files it references.
 --
 --   Other third-party libraries:
 --     Intel IPP:                   2026.0.0 [2026.0.0]
---            at:                   /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/icv
+--            at:                   /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/icv
 --     Intel IPP IW:                sources (2026.0.0)
---               at:                /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/iw
+--               at:                /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/iw
 --     VA:                          NO
 --     Lapack:                      YES (Built-In libclapack)
 --     DNN MLAS:                    YES (SGEMM-only, vendored)
@@ -645,7 +601,14 @@ but not all the files it references.
 --
 --   ONNX Runtime:                  NO
 --
+--   Python 3:
+--     Interpreter:                 /usr/bin/python3 (ver 3.12.3)
+--     Libraries:                   /usr/lib/x86_64-linux-gnu/libpython3.12.so (ver 3.12.3)
+--     Limited API:                 NO
+--     numpy:                       /usr/lib/python3/dist-packages/numpy/core/include (ver 1.26.4)
+--     install path:                lib/python3.12/dist-packages/cv2/python-3.12
+--
 --   Python (for build):            /usr/bin/python3
 --
---   Install to:                    /home/runner/work/csOpenCV/csOpenCV/workspace/install/csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja/opencv
+--   Install to:                    /home/runner/work/csOpenCV/csOpenCV/workspace/install/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv
 -- -----------------------------------------------------------------
