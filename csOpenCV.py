@@ -35,11 +35,13 @@ from csorchestrator.frontend.step.step_upload_artifacts import (
     StepUploadArtifacts,
     create_artifact_prefix_from_orchestrator_name_version,
 )
+from csorchestrator.frontend.step.step_custom_command import StepInstallAptPackages
 from csorchestrator.frontend.step.step_get_precompiled_lib_github import (
     StepGetPrecompiledLibGithub,
 )
 
 from csorchestrator.frontend.local_execution.step_utils import (
+    StepExecuteOnlyOn,
     StepExecuteOnlyOncePerMatrix,
     StepSkipExecutionOnLocal,
 )
@@ -49,6 +51,8 @@ from csorchestrator.application.factory.factory import (
     create_orchestrator_factory_all_supported_cases,
 )
 from csorchestrator.application.cli.cli import orchestrator_main_with_default_run
+from csorchestrator.domain.context.context_os_architecture import OS
+from csorchestrator.domain.context.context_os_architecture import UBUNTU_STRING_PREFIX
 
 
 def create_orchestrator() -> OptionalOrchestratorWithReport:
@@ -106,6 +110,40 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
                 StepGetRepositoryExtraAccessToken("${{ secrets.ACTIONS_ORG_ACCESS }}")
             )
         )
+
+    # ----------------------------------------------------------------
+    p = o.create_phase("Install Requirements (Linux-Ubuntu)")
+    p.add_step(
+        StepInstallAptPackages(
+            name="install apt packages",
+            description="install apt packages if not already installed in the system",
+            packages=[
+                "libgstreamer-plugins-base1.0-dev",
+                "libgtk2.0-dev",
+                "gstreamer1.0*",
+                "libswscale-dev",
+                "libtbb-dev",
+                "python3-numpy",
+                "libtbb12",
+                "libpng-dev",
+                "python3-pip",
+                "libavcodec-dev",
+                "python3-dev",
+                "ubuntu-restricted-extras",
+                "pkg-config",
+                "libavformat-dev",
+                "libdc1394-dev",
+                "libjpeg-dev",
+                "libtiff-dev",
+                "libgstreamer1.0-dev",
+            ],
+            dry_run=False,
+        )
+        .add_extra(StepExecuteOnlyOncePerMatrix())
+        .add_extra(
+            StepExecuteOnlyOn(os=OS.LINUX, version_starts_with=UBUNTU_STRING_PREFIX)
+        )
+    )
 
     # ----------------------------------------------------------------
     p = o.create_phase("Get Precompiled Libraries")
