@@ -2,7 +2,16 @@ links
 -----
 https://developer.ridgerun.com/wiki/index.php/Compiling_OpenCV_from_Source
 https://docs.opencv.org/4.13.0/db/d05/tutorial_config_reference.html
+
+
 https://gist.github.com/minhhieutruong0705/8f0ec70c400420e0007c15c98510f133
+--> this has a much longer package list
+
+
+NVIDIA CUDA INSTALLATION Guide
+-------------------------------
+https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
+
 
 CUDA ARCH BIN and PTX
 https://forum.opencv.org/t/how-to-compile-opencv-to-support-cuda-multi-arch-for-7-5-and-8-6/12220
@@ -25,13 +34,29 @@ sudo mv cuda-ubuntu2404.pin /etc/apt/preferences.d/cuda-repository-pin-600
 wget https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda-repo-ubuntu2404-13-3-local_13.3.1-610.43.02-1_amd64.deb
 sudo dpkg -i cuda-repo-ubuntu2404-13-3-local_13.3.1-610.43.02-1_amd64.deb
 sudo cp /var/cuda-repo-ubuntu2404-13-3-local/cuda-*-keyring.gpg /usr/share/keyrings/
-sudo apt-get update
-sudo apt-get -y install cuda-toolkit-13-3
+sudo apt update
+sudo apt install cuda-toolkit-13-3
+
+22.04
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
+sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
+wget https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb
+sudo dpkg -i cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb
+sudo cp /var/cuda-repo-ubuntu2204-13-3-local/cuda-*-keyring.gpg /usr/share/keyrings/
+sudo apt update
+sudo apt install cuda-toolkit-13-3
 
 # cudnn
 
-sudo apt install zlib1g
+https://developer.nvidia.com/cudnn-downloads?target_os=Linux&target_arch=x86_64&Distribution=Debian&target_version=12&target_type=deb_local&Configuration=Full
 
+wget https://developer.download.nvidia.com/compute/cudnn/9.23.2/local_installers/cudnn-local-repo-debian12-9.23.2_1.0-1_amd64.deb
+sudo dpkg -i cudnn-local-repo-debian12-9.23.2_1.0-1_amd64.deb
+sudo cp /var/cudnn-local-repo-debian12-9.23.2/cudnn-*-keyring.gpg /usr/share/keyrings/
+sudo apt-get update
+sudo apt -y install libcudnn9-cuda-13 libcudnn9-dev-cuda-13
+
+# other packages that seems not necessary cudnn cudnn9 cudnn9-cuda-13
 
 ### make the install of non interactive
 
@@ -41,89 +66,11 @@ echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select t
 
 sudo -E apt install -y ttf-mscorefonts-installer
 
---------------------------------------------------------------------
----------------------------- BY CHATGPT ----------------------------
---------------------------------------------------------------------
 
-# =========================
-# CUDA + cuDNN + OpenCV CUDA BUILD (LOCAL + GITHUB ACTIONS IDENTICAL SETUP)
-# Ubuntu 22.04
-# =========================
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+WINDOWS
 
-# -------------------------
-# 1. INSTALL CUDA TOOLKIT
-# -------------------------
-
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
-sudo dpkg -i cuda-keyring_1.1-1_all.deb
-
-sudo apt update
-sudo apt install -y cuda-toolkit-12-4
-
-# Add CUDA to environment
-echo 'export PATH=/usr/local/cuda/bin:$PATH' >> ~/.bashrc
-echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
-source ~/.bashrc
-
-# verify CUDA
-nvcc --version
-
-
-# -------------------------
-# 2. INSTALL cuDNN
-# -------------------------
-
-sudo apt update
-sudo apt install -y libcudnn9 libcudnn9-dev
-
-# verify cuDNN
-cat /usr/include/cudnn_version.h | grep CUDNN_MAJOR
-
-
-# -------------------------
-# 3. INSTALL OPENCV BUILD DEPENDENCIES
-# -------------------------
-
-sudo apt install -y \
-  build-essential \
-  cmake \
-  git \
-  pkg-config \
-  libgtk-3-dev \
-  libavcodec-dev \
-  libavformat-dev \
-  libavutil-dev \
-  libswscale-dev \
-  libjpeg-dev \
-  libpng-dev \
-  libtiff-dev
-
-
-# -------------------------
-# 4. BUILD OPENCV WITH CUDA SUPPORT
-# -------------------------
-
-git clone https://github.com/opencv/opencv.git
-git clone https://github.com/opencv/opencv_contrib.git
-
-mkdir build
-cd build
-
-cmake ../opencv \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DWITH_CUDA=ON \
-  -DWITH_CUDNN=ON \
-  -DOPENCV_DNN_CUDA=ON \
-  -DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules \
-  -DBUILD_TESTS=OFF \
-  -DBUILD_EXAMPLES=OFF
-
-cmake --build . -j$(nproc)
-
-
-# -------------------------
-# 5. GITHUB ACTIONS NOTES
-# -------------------------
-# Use ubuntu-22.04 runner
-# Run the SAME commands above in steps
-# CI will compile CUDA code but cannot run GPU tests (no NVIDIA GPU available)
+https://github.com/chrismeunier/OpenCV-CUDA-installation
+https://jinscott.medium.com/build-opencv-on-windows-with-cuda-f880270eadb0

@@ -239,7 +239,7 @@ jobs:
         shell: bash
         run: |
           # Remove libunwind causing errors on ubuntu 22.04
-          sudo apt-get remove libunwind-*
+          sudo apt remove libunwind-*
 
       - name: Run command install apt packages
         if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu') }}
@@ -286,6 +286,40 @@ jobs:
           else
             echo "All packages already installed."
           fi
+
+      - name: Run command Install CUDA (Ubuntu 24.04)
+        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu24.04') }}
+        shell: bash
+        run: |
+          wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-ubuntu2404.pin
+          sudo mv cuda-ubuntu2404.pin /etc/apt/preferences.d/cuda-repository-pin-600
+          wget -q https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda-repo-ubuntu2404-13-3-local_13.3.1-610.43.02-1_amd64.deb
+          sudo dpkg -i cuda-repo-ubuntu2404-13-3-local_13.3.1-610.43.02-1_amd64.deb
+          sudo cp /var/cuda-repo-ubuntu2404-13-3-local/cuda-*-keyring.gpg /usr/share/keyrings/
+          sudo apt update
+          sudo apt install -y cuda-toolkit-13-3
+
+      - name: Run command Install CUDA (Ubuntu 22.04)
+        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu22.04') }}
+        shell: bash
+        run: |
+          wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
+          sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
+          wget -q https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb
+          sudo dpkg -i cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb
+          sudo cp /var/cuda-repo-ubuntu2204-13-3-local/cuda-*-keyring.gpg /usr/share/keyrings/
+          sudo apt update
+          sudo apt install -y cuda-toolkit-13-3
+
+      - name: Run command Install cudnn (Ubuntu)
+        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu') }}
+        shell: bash
+        run: |
+          wget -q https://developer.download.nvidia.com/compute/cudnn/9.23.2/local_installers/cudnn-local-repo-debian12-9.23.2_1.0-1_amd64.deb
+          sudo dpkg -i cudnn-local-repo-debian12-9.23.2_1.0-1_amd64.deb
+          sudo cp /var/cudnn-local-repo-debian12-9.23.2/cudnn-*-keyring.gpg /usr/share/keyrings/
+          sudo apt update
+          sudo apt -y install libcudnn9-cuda-13 libcudnn9-dev-cuda-13
 
       - name: Get Precompiled Lib eigen3 from 3rdPartyBaseLibs prepare filename
         id: filename_3rdPartyBaseLibs_eigen3

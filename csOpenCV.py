@@ -140,7 +140,7 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
             description="remove libunwind",
             cmd=[
                 "# Remove libunwind causing errors on ubuntu 22.04",
-                "sudo apt-get remove libunwind-*",
+                "sudo apt remove libunwind-*",
             ],
         )
         .add_extra(StepExecuteOnlyOncePerMatrix())
@@ -178,6 +178,68 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
                 "ubuntu-restricted-extras",
             ],
             dry_run=False,
+        )
+        .add_extra(StepExecuteOnlyOncePerMatrix())
+        .add_extra(
+            StepExecuteOnlyOn(os=OS.LINUX, version_starts_with=UBUNTU_STRING_PREFIX)
+        )
+    )
+
+    p.add_step(
+        StepBashScriptCommand(
+            name="Install CUDA (Ubuntu 24.04)",
+            description="remove libunwind",
+            cmd=[
+                "wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-ubuntu2404.pin",
+                "sudo mv cuda-ubuntu2404.pin /etc/apt/preferences.d/cuda-repository-pin-600",
+                "wget -q https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda-repo-ubuntu2404-13-3-local_13.3.1-610.43.02-1_amd64.deb",
+                "sudo dpkg -i cuda-repo-ubuntu2404-13-3-local_13.3.1-610.43.02-1_amd64.deb",
+                "sudo cp /var/cuda-repo-ubuntu2404-13-3-local/cuda-*-keyring.gpg /usr/share/keyrings/",
+                "sudo apt update",
+                "sudo apt install -y cuda-toolkit-13-3",
+            ],
+        )
+        .add_extra(StepExecuteOnlyOncePerMatrix())
+        .add_extra(
+            StepExecuteOnlyOn(
+                os=OS.LINUX, version_starts_with=UBUNTU_VERSIONS.UBUNTU_24_04.value
+            )
+        )
+    )
+
+    p.add_step(
+        StepBashScriptCommand(
+            name="Install CUDA (Ubuntu 22.04)",
+            description="remove libunwind",
+            cmd=[
+                "wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin",
+                "sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600",
+                "wget -q https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb",
+                "sudo dpkg -i cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb",
+                "sudo cp /var/cuda-repo-ubuntu2204-13-3-local/cuda-*-keyring.gpg /usr/share/keyrings/",
+                "sudo apt update",
+                "sudo apt install -y cuda-toolkit-13-3",
+            ],
+        )
+        .add_extra(StepExecuteOnlyOncePerMatrix())
+        .add_extra(
+            StepExecuteOnlyOn(
+                os=OS.LINUX, version_starts_with=UBUNTU_VERSIONS.UBUNTU_22_04.value
+            )
+        )
+    )
+
+    p.add_step(
+        StepBashScriptCommand(
+            name="Install cudnn (Ubuntu)",
+            description="remove libunwind",
+            cmd=[
+                "wget -q https://developer.download.nvidia.com/compute/cudnn/9.23.2/local_installers/cudnn-local-repo-debian12-9.23.2_1.0-1_amd64.deb",
+                "sudo dpkg -i cudnn-local-repo-debian12-9.23.2_1.0-1_amd64.deb",
+                "sudo cp /var/cudnn-local-repo-debian12-9.23.2/cudnn-*-keyring.gpg /usr/share/keyrings/",
+                "sudo apt update",
+                "sudo apt -y install libcudnn9-cuda-13 libcudnn9-dev-cuda-13",
+            ],
         )
         .add_extra(StepExecuteOnlyOncePerMatrix())
         .add_extra(

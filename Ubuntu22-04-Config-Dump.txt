@@ -6,8 +6,8 @@
 --     Version control (extra):     755e506
 --
 --   Platform:
---     Timestamp:                   2026-07-01T08:18:30Z
---     Host:                        Linux 6.17.0-1018-azure x86_64
+--     Timestamp:                   2026-07-01T08:18:24Z
+--     Host:                        Linux 6.8.0-1059-azure x86_64
 --     CMake:                       3.31.6
 --     CMake generator:             Ninja
 --     CMake build tool:            /usr/local/bin/ninja
@@ -28,7 +28,7 @@
 --   C/C++:
 --     Built as dynamic libs?:      YES
 --     C++ standard:                17
---     C++ Compiler:                /usr/bin/g++  (ver 13.3.0)
+--     C++ Compiler:                /usr/bin/g++  (ver 11.4.0)
 --     C++ flags (Release):         -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections  -msse3 -fvisibility=hidden -fvisibility-inlines-hidden -O3 -DNDEBUG  -DNDEBUG
 --     C++ flags (Debug):           -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections  -msse3 -fvisibility=hidden -fvisibility-inlines-hidden -g  -O0 -DDEBUG -D_DEBUG
 --     C Compiler:                  /usr/bin/gcc
@@ -51,20 +51,20 @@
 --     Non-free algorithms:         NO
 --
 --   GUI:                           GTK3
---     GTK+:                        YES (ver 3.24.41)
+--     GTK+:                        YES (ver 3.24.33)
 --     VTK support:                 NO
 --     Built-in Unicode font:       YES
 --
 --   Media I/O:
---     ZLib:                        /usr/lib/x86_64-linux-gnu/libz.so (ver 1.3)
+--     ZLib:                        /usr/lib/x86_64-linux-gnu/libz.so (ver 1.2.11)
 --     JPEG:                        /usr/lib/x86_64-linux-gnu/libjpeg.so (ver 80)
 --     WEBP:                        /usr/lib/x86_64-linux-gnu/libwebp.so (ver decoder: 0x0209, encoder: 0x020f, demux: 0x0107)
 --     AVIF:                        NO
---     PNG:                         /usr/lib/x86_64-linux-gnu/libpng.so (ver 1.6.43)
+--     PNG:                         /usr/lib/x86_64-linux-gnu/libpng.so (ver 1.6.37)
 --       Metadata Support:          EXIF XMP ICC
---     TIFF:                        /usr/lib/x86_64-linux-gnu/libtiff.so (ver 42 / 4.5.1)
---     JPEG 2000:                   build (ver 2.5.3)
---     OpenEXR:                     OpenEXR::OpenEXR (ver 3.1.5)
+--     TIFF:                        /usr/lib/x86_64-linux-gnu/libtiff.so (ver 42 / 4.3.0)
+--     JPEG 2000:                   OpenJPEG (ver 2.4.0)
+--     OpenEXR:                     /usr/lib/x86_64-linux-gnu/libImath-2_5.so /usr/lib/x86_64-linux-gnu/libIlmImf-2_5.so /usr/lib/x86_64-linux-gnu/libIex-2_5.so /usr/lib/x86_64-linux-gnu/libHalf-2_5.so /usr/lib/x86_64-linux-gnu/libIlmThread-2_5.so (ver 2.5.7)
 --     GIF:                         YES
 --     HDR:                         YES
 --     SUNRASTER:                   YES
@@ -73,12 +73,12 @@
 --
 --   Video I/O:
 --     FFMPEG:                      YES
---       avcodec:                   YES (60.31.102)
---       avformat:                  YES (60.16.100)
---       avutil:                    YES (58.29.100)
---       swscale:                   YES (7.5.100)
+--       avcodec:                   YES (58.134.100)
+--       avformat:                  YES (58.76.100)
+--       avutil:                    YES (56.70.100)
+--       swscale:                   YES (5.9.100)
 --       avdevice:                  NO
---     GStreamer:                   YES (1.24.2)
+--     GStreamer:                   YES (1.20.3)
 --     v4l/v4l2:                    YES (linux/videodev2.h)
 --     Orbbec:                      YES
 --
@@ -88,9 +88,9 @@
 --
 --   Other third-party libraries:
 --     Intel IPP:                   2026.0.0 [2026.0.0]
---            at:                   /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/icv
+--            at:                   /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/icv
 --     Intel IPP IW:                sources (2026.0.0)
---               at:                /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/iw
+--               at:                /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/iw
 --     VA:                          NO
 --     Lapack:                      YES (Built-In libclapack)
 --     DNN MLAS:                    YES (SGEMM-only, vendored)
@@ -107,13 +107,13 @@
 --   ONNX Runtime:                  NO
 --
 --   Python 3:
---     Interpreter:                 /usr/bin/python3 (ver 3.12.3)
---     Libraries:                   /usr/lib/x86_64-linux-gnu/libpython3.12.so (ver 3.12.3)
+--     Interpreter:                 /usr/bin/python3 (ver 3.10.12)
+--     Libraries:                   /usr/lib/x86_64-linux-gnu/libpython3.10.so (ver 3.10.12)
 --     Limited API:                 NO
---     numpy:                       /usr/lib/python3/dist-packages/numpy/core/include (ver 1.26.4)
---     install path:                lib/python3.12/dist-packages/cv2/python-3.12
+--     numpy:                       /usr/lib/python3/dist-packages/numpy/core/include (ver 1.21.5)
+--     install path:                lib/python3.10/dist-packages/cv2/python-3.10
 --
 --   Python (for build):            /usr/bin/python3
 --
---   Install to:                    /home/runner/work/csOpenCV/csOpenCV/workspace/install/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv
+--   Install to:                    /home/runner/work/csOpenCV/csOpenCV/workspace/install/csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninja/opencv
 -- -----------------------------------------------------------------
