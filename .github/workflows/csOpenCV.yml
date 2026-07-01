@@ -64,93 +64,41 @@ jobs:
             os_version: ubuntu22.04
             architecture: x64
             architecture_variant: generic
-            compiler: gcc
-            c_compiler: gcc
-            cpp_compiler: g++
+            compiler: clang
+            c_compiler: clang
+            cpp_compiler: clang++
             compiler_version: default
-            generator: ninjamulticonfig
-            generator_type: multiconfig
-            generator_cmake: Ninja Multi-Config
+            generator: ninja
+            generator_type: singleconfig
+            generator_cmake: Ninja
             runner: ubuntu-22.04
           - execution_id: 2
             os: linux
-            os_version: ubuntu22.04
+            os_version: ubuntu24.04
             architecture: x64
             architecture_variant: generic
-            compiler: clang
-            c_compiler: clang
-            cpp_compiler: clang++
+            compiler: gcc
+            c_compiler: gcc
+            cpp_compiler: g++
             compiler_version: default
             generator: ninja
             generator_type: singleconfig
             generator_cmake: Ninja
-            runner: ubuntu-22.04
+            runner: ubuntu-24.04
           - execution_id: 3
             os: linux
-            os_version: ubuntu22.04
+            os_version: ubuntu24.04
             architecture: x64
             architecture_variant: generic
             compiler: clang
             c_compiler: clang
             cpp_compiler: clang++
             compiler_version: default
-            generator: ninjamulticonfig
-            generator_type: multiconfig
-            generator_cmake: Ninja Multi-Config
-            runner: ubuntu-22.04
+            generator: ninja
+            generator_type: singleconfig
+            generator_cmake: Ninja
+            runner: ubuntu-24.04
           - execution_id: 4
-            os: linux
-            os_version: ubuntu24.04
-            architecture: x64
-            architecture_variant: generic
-            compiler: gcc
-            c_compiler: gcc
-            cpp_compiler: g++
-            compiler_version: default
-            generator: ninja
-            generator_type: singleconfig
-            generator_cmake: Ninja
-            runner: ubuntu-24.04
-          - execution_id: 5
-            os: linux
-            os_version: ubuntu24.04
-            architecture: x64
-            architecture_variant: generic
-            compiler: gcc
-            c_compiler: gcc
-            cpp_compiler: g++
-            compiler_version: default
-            generator: ninjamulticonfig
-            generator_type: multiconfig
-            generator_cmake: Ninja Multi-Config
-            runner: ubuntu-24.04
-          - execution_id: 6
-            os: linux
-            os_version: ubuntu24.04
-            architecture: x64
-            architecture_variant: generic
-            compiler: clang
-            c_compiler: clang
-            cpp_compiler: clang++
-            compiler_version: default
-            generator: ninja
-            generator_type: singleconfig
-            generator_cmake: Ninja
-            runner: ubuntu-24.04
-          - execution_id: 7
-            os: linux
-            os_version: ubuntu24.04
-            architecture: x64
-            architecture_variant: generic
-            compiler: clang
-            c_compiler: clang
-            cpp_compiler: clang++
-            compiler_version: default
-            generator: ninjamulticonfig
-            generator_type: multiconfig
-            generator_cmake: Ninja Multi-Config
-            runner: ubuntu-24.04
-          - execution_id: 8
             os: windows
             os_version: v10
             architecture: x64
@@ -161,7 +109,7 @@ jobs:
             generator_type: multiconfig
             generator_cmake: Visual Studio 17 2022
             runner: windows-2022
-          - execution_id: 9
+          - execution_id: 5
             os: windows
             os_version: v10
             architecture: x64
@@ -172,7 +120,7 @@ jobs:
             generator_type: multiconfig
             generator_cmake: Visual Studio 18 2026
             runner: windows-2025-vs2026
-          - execution_id: 10
+          - execution_id: 6
             os: windows
             os_version: v10
             architecture: x64
@@ -184,7 +132,7 @@ jobs:
             generator_type: multiconfig
             generator_cmake: Visual Studio 17 2022
             runner: windows-2022
-          - execution_id: 11
+          - execution_id: 7
             os: windows
             os_version: v10
             architecture: x64

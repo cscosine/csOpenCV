@@ -8,6 +8,11 @@ https://gist.github.com/minhhieutruong0705/8f0ec70c400420e0007c15c98510f133
 --> this has a much longer package list
 
 
+OTHER SOURCES
+-------------------------------
+https://github.com/mdegans/nano_build_opencv
+https://github.com/alexfcoding/OpenCV-cuDNN-manual
+
 NVIDIA CUDA INSTALLATION Guide
 -------------------------------
 https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation

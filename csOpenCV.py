@@ -75,7 +75,10 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
     }
 
     o = create_orchestrator_factory_all_supported_cases(
-        name="csOpenCV", version="0.1.0", execution_matrix_name="orchestrator-matrix"
+        name="csOpenCV",
+        version="0.1.0",
+        execution_matrix_name="orchestrator-matrix",
+        use_ninjamulti=False,
     )
 
     o.wf_config = WorkflowConfig(
