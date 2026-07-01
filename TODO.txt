@@ -15,6 +15,7 @@ https://medium.com/@juancrrn/installing-cuda-and-cudnn-in-ubuntu-20-04-for-deep-
 then
 https://medium.com/@juancrrn/installing-opencv-4-with-cuda-in-ubuntu-20-04-fde6d6a0a367
 
+## TESTING THIS
 CUDA from nvidia
 https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=deb_local
 
@@ -40,8 +41,9 @@ echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select t
 
 sudo -E apt install -y ttf-mscorefonts-installer
 
-
-----------------------------
+--------------------------------------------------------------------
+---------------------------- BY CHATGPT ----------------------------
+--------------------------------------------------------------------
 
 # =========================
 # CUDA + cuDNN + OpenCV CUDA BUILD (LOCAL + GITHUB ACTIONS IDENTICAL SETUP)

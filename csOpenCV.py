@@ -54,7 +54,7 @@ from csorchestrator.application.factory.factory import (
     create_orchestrator_factory_all_supported_cases,
 )
 from csorchestrator.application.cli.cli import orchestrator_main_with_default_run
-from csorchestrator.domain.context.context_os_architecture import OS
+from csorchestrator.domain.context.context_os_architecture import OS, UBUNTU_VERSIONS
 from csorchestrator.domain.context.context_os_architecture import UBUNTU_STRING_PREFIX
 
 
@@ -135,28 +135,47 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
     )
 
     p.add_step(
+        StepBashScriptCommand(
+            name="remove libunwind (Ubuntu 22.04)",
+            description="remove libunwind",
+            cmd=[
+                "# Remove libunwind causing errors on ubuntu 22.04",
+                "sudo apt-get remove libunwind-*",
+            ],
+        )
+        .add_extra(StepExecuteOnlyOncePerMatrix())
+        .add_extra(
+            StepExecuteOnlyOn(
+                os=OS.LINUX, version_starts_with=UBUNTU_VERSIONS.UBUNTU_22_04.value
+            )
+        )
+    )
+
+    p.add_step(
         StepInstallAptPackages(
             name="install apt packages",
             description="install apt packages if not already installed in the system",
             packages=[
                 "gstreamer1.0*",
-                "libavformat-dev",
-                "libpng-dev",
-                "python3-numpy",
-                "libtiff-dev",
-                "libgstreamer-plugins-base1.0-dev",
                 "libavcodec-dev",
+                "libavformat-dev",
                 "libdc1394-dev",
-                "pkg-config",
-                "ubuntu-restricted-extras",
-                "libtbb-dev",
-                "python3-pip",
-                "libswscale-dev",
-                "python3-dev",
-                "libgtk2.0-dev",
-                "libtbb12",
-                "libjpeg-dev",
+                "libgstreamer-plugins-base1.0-dev",
                 "libgstreamer1.0-dev",
+                "libgtk-3-dev",
+                "libjpeg-dev",
+                "libopenexr-dev",
+                "libpng-dev",
+                "libswscale-dev",
+                "libtbb-dev",
+                "libtbb12",
+                "libtiff-dev",
+                "libwebp-dev",
+                "pkg-config",
+                "python3-dev",
+                "python3-numpy",
+                "python3-pip",
+                "ubuntu-restricted-extras",
             ],
             dry_run=False,
         )

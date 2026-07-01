@@ -1,5 +1,9 @@
+#!/usr/bin/env python3
+
+print("---- Ubuntu 24.04 and 22.04----")
+# Ubuntu 24.04
 packages_list = [
-    "libgtk2.0-dev",
+    "libgtk-3-dev",
     "pkg-config",
     "libavcodec-dev",
     "libavformat-dev",
@@ -9,6 +13,7 @@ packages_list = [
     "libjpeg-dev",
     "libpng-dev",
     "libtiff-dev",
+    "libwebp-dev",
     "libdc1394-dev",
     "python3-pip",
     "python3-numpy",
@@ -17,9 +22,10 @@ packages_list = [
     "ubuntu-restricted-extras",
     "libgstreamer1.0-dev",
     "libgstreamer-plugins-base1.0-dev",
+    "libopenexr-dev",
 ]
 
-packages_list_unique = set(sorted(packages_list))
+packages_list_unique = sorted(set(sorted(packages_list)))
 for i in packages_list_unique:
     print(f"{i} ", end="")
 print("")
