@@ -321,6 +321,12 @@ jobs:
           sudo apt update
           sudo apt -y install libcudnn9-cuda-13 libcudnn9-dev-cuda-13
 
+      - name: Run command verify a cuda stub library exists
+        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu') }}
+        shell: bash
+        run: |
+          ls /usr/local/cuda/lib64/stubs/libcuda.so
+
       - name: Get Precompiled Lib eigen3 from 3rdPartyBaseLibs prepare filename
         id: filename_3rdPartyBaseLibs_eigen3
         shell: python

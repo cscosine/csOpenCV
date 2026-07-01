@@ -247,6 +247,20 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
         )
     )
 
+    p.add_step(
+        StepBashScriptCommand(
+            name="verify a cuda stub library exists",
+            description="verify cuda stub library exists",
+            cmd=[
+                "ls /usr/local/cuda/lib64/stubs/libcuda.so",
+            ],
+        )
+        .add_extra(StepExecuteOnlyOncePerMatrix())
+        .add_extra(
+            StepExecuteOnlyOn(os=OS.LINUX, version_starts_with=UBUNTU_STRING_PREFIX)
+        )
+    )
+
     # ----------------------------------------------------------------
     p = o.create_phase("Get Precompiled Libraries")
 
