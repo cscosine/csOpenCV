@@ -235,7 +235,16 @@ jobs:
             echo "All packages already installed."
           fi
 
-      - name: Run command Install CUDA (Windows 10)
+      - name: Run command Install numpy (Windows)
+        if: ${{ matrix.os == 'windows' }}
+        shell: powershell
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          python -m pip install --upgrade pip
+          python -m pip install numpy
+
+      - name: Run command Install CUDA (Windows)
         if: ${{ matrix.os == 'windows' }}
         shell: powershell
         run: |
@@ -261,7 +270,7 @@ jobs:
 
           Remove-Item -Path $installer -ErrorAction SilentlyContinue
 
-      - name: Run command Verify CUDA (Windows 10)
+      - name: Run command Verify CUDA (Windows)
         if: ${{ matrix.os == 'windows' }}
         shell: powershell
         run: |
@@ -273,7 +282,7 @@ jobs:
 
           & $nvcc --version
 
-      - name: Run command Install cuDNN (Windows 10)
+      - name: Run command Install cuDNN (Windows)
         if: ${{ matrix.os == 'windows' }}
         shell: powershell
         run: |
@@ -299,17 +308,48 @@ jobs:
 
           Remove-Item -Path $installer -ErrorAction SilentlyContinue
 
-      - name: Run command Verify cuDNN (Windows 10)
+      - name: Run command Verify cuDNN (Windows)
         if: ${{ matrix.os == 'windows' }}
         shell: powershell
         run: |
-          $dll = Get-ChildItem -Path "C:\Program Files\NVIDIA" -Recurse -Filter "cudnn*.dll" -ErrorAction SilentlyContinue
-          if (-not $dll) {
-            throw "cuDNN DLL not found."
+          $root = "C:/Program Files/NVIDIA/CUDNN/v9.23"
+
+          # Print directory tree first (directories only view via tree)
+          Write-Host "cuDNN directory tree ($root):"
+          cmd /c "tree "$root" /a"
+          Write-Host ""
+
+          $dllPath = Join-Path $root "bin/12.9/x64"
+          $includePath = Join-Path $root "include/12.9"
+          $libFile = Join-Path $root "lib/12.9/x64/cudnn.lib"
+
+          # Strict existence checks
+          if (-not (Test-Path $dllPath)) {
+            throw "cuDNN DLL directory not found: $dllPath"
           }
 
-          Write-Host "Found cuDNN:"
-          $dll | Select-Object FullName
+          if (-not (Test-Path $includePath)) {
+            throw "cuDNN include directory not found: $includePath"
+          }
+
+          if (-not (Test-Path $libFile)) {
+            throw "cuDNN library file not found: $libFile"
+          }
+
+          # List DLLs strictly from target folder
+          $dlls = Get-ChildItem -Path $dllPath -Filter "cudnn*.dll" -ErrorAction Stop
+
+          if (-not $dlls) {
+            throw "No cuDNN DLLs found in $dllPath"
+          }
+
+          Write-Host ""
+          Write-Host "Found cuDNN DLLs in ${dllPath}:"
+          $dlls | Select-Object -ExpandProperty FullName
+
+          Write-Host ""
+          Write-Host "Include path verified: ${includePath}"
+          Write-Host "Library verified: ${libFile}"
 
       - name: Run command Install CUDA (Ubuntu 24.04)
         if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu24.04') }}

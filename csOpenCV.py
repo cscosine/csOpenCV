@@ -188,10 +188,25 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
             StepExecuteOnlyOn(os=OS.LINUX, version_starts_with=UBUNTU_STRING_PREFIX)
         )
     )
+    p.add_step(
+        StepWinPSCommand(
+            name="Install numpy (Windows)",
+            description="install numpy",
+            # from https://developer.nvidia.com/cuda-downloads?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exe_local
+            cmd=[
+                '$ErrorActionPreference = "Stop"',
+                "",
+                "python -m pip install --upgrade pip",
+                "python -m pip install numpy",
+            ],
+        )
+        .add_extra(StepExecuteOnlyOncePerMatrix())
+        .add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
+    )
 
     p.add_step(
         StepWinPSCommand(
-            name="Install CUDA (Windows 10)",
+            name="Install CUDA (Windows)",
             description="install cuda",
             # from https://developer.nvidia.com/cuda-downloads?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exe_local
             cmd=[
@@ -224,7 +239,7 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
 
     p.add_step(
         StepWinPSCommand(
-            name="Verify CUDA (Windows 10)",
+            name="Verify CUDA (Windows)",
             description="verify cuda installation",
             cmd=[
                 '$nvcc = "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.3\\bin\\nvcc.exe"',
@@ -242,7 +257,7 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
 
     p.add_step(
         StepWinPSCommand(
-            name="Install cuDNN (Windows 10)",
+            name="Install cuDNN (Windows)",
             description="install cuDNN",
             # from https://developer.nvidia.com/cudnn-downloads?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exe_local
             cmd=[
@@ -275,16 +290,47 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
 
     p.add_step(
         StepWinPSCommand(
-            name="Verify cuDNN (Windows 10)",
+            name="Verify cuDNN (Windows)",
             description="verify cuDNN installation",
             cmd=[
-                '$dll = Get-ChildItem -Path "C:\\Program Files\\NVIDIA" -Recurse -Filter "cudnn*.dll" -ErrorAction SilentlyContinue',
-                "if (-not $dll) {",
-                '  throw "cuDNN DLL not found."',
+                '$root = "C:/Program Files/NVIDIA/CUDNN/v9.23"',
+                "",
+                "# Print directory tree first (directories only view via tree)",
+                'Write-Host "cuDNN directory tree ($root):"',
+                'cmd /c "tree "$root" /a"',
+                'Write-Host ""',
+                "",
+                '$dllPath = Join-Path $root "bin/12.9/x64"',
+                '$includePath = Join-Path $root "include/12.9"',
+                '$libFile = Join-Path $root "lib/12.9/x64/cudnn.lib"',
+                "",
+                "# Strict existence checks",
+                "if (-not (Test-Path $dllPath)) {",
+                '  throw "cuDNN DLL directory not found: $dllPath"',
                 "}",
                 "",
-                'Write-Host "Found cuDNN:"',
-                "$dll | Select-Object FullName",
+                "if (-not (Test-Path $includePath)) {",
+                '  throw "cuDNN include directory not found: $includePath"',
+                "}",
+                "",
+                "if (-not (Test-Path $libFile)) {",
+                '  throw "cuDNN library file not found: $libFile"',
+                "}",
+                "",
+                "# List DLLs strictly from target folder",
+                '$dlls = Get-ChildItem -Path $dllPath -Filter "cudnn*.dll" -ErrorAction Stop',
+                "",
+                "if (-not $dlls) {",
+                '  throw "No cuDNN DLLs found in $dllPath"',
+                "}",
+                "",
+                'Write-Host ""',
+                'Write-Host "Found cuDNN DLLs in ${dllPath}:"',
+                "$dlls | Select-Object -ExpandProperty FullName",
+                "",
+                'Write-Host ""',
+                'Write-Host "Include path verified: ${includePath}"',
+                'Write-Host "Library verified: ${libFile}"',
             ],
         )
         .add_extra(StepExecuteOnlyOncePerMatrix())
