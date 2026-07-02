@@ -297,7 +297,7 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
                 "",
                 "# Print directory tree first (directories only view via tree)",
                 'Write-Host "cuDNN directory tree ($root):"',
-                'cmd /c "tree "$root" /a"',
+                'cmd /c "tree `"$root`" /a"',
                 'Write-Host ""',
                 "",
                 '$dllPath = Join-Path $root "bin/12.9/x64"',
