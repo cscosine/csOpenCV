@@ -35,7 +35,6 @@ from csorchestrator.frontend.step.step_upload_artifacts import (
     StepUploadArtifacts,
     create_artifact_prefix_from_orchestrator_name_version,
 )
-from csorchestrator.frontend.step.step_github_action import StepAddGitHubAction
 from csorchestrator.frontend.step.step_custom_command import (
     StepBashScriptCommand,
     StepInstallAptPackages,
@@ -191,19 +190,6 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
     )
 
     p.add_step(
-        StepAddGitHubAction(
-            name="Cache Cuda installer",
-            description="cache cuda installer",
-            id="cuda_cache",
-            uses="actions/cache@v6",
-            with_list=[
-                "path: ${{ runner.temp }}/cuda_13.3.1_windows.exe",
-                "key: cuda-installer-13.3.1",
-            ],
-        ).add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
-    )
-
-    p.add_step(
         StepWinPSCommand(
             name="Install CUDA (Windows 10)",
             description="install cuda",
@@ -211,29 +197,14 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
             cmd=[
                 '$ErrorActionPreference = "Stop"',
                 "",
-                'if ("${{ steps.cuda_cache.outputs.cache-hit }}" -eq "true") {',
-                '    Write-Host "CUDA installer cache HIT"',
-                "} else {",
-                '    Write-Host "CUDA installer cache MISS"',
-                "}",
-                "",
                 '$installer = "$env:TEMP\cuda_13.3.1_windows.exe"',
                 "",
-                "if (Test-Path $installer) {",
-                '    Write-Host "Installer present on disk"',
-                "}",
-                "",
-                "if (-not (Test-Path $installer)) {",
-                '  Write-Host "Download CUDA installer..."',
-                "  $download = [System.Diagnostics.Stopwatch]::StartNew()",
-                '  $url = "https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda_13.3.1_windows.exe"',
-                "  Invoke-WebRequest -Uri $url -OutFile $installer",
-                "  $download.Stop()",
-                '  Write-Host ("Download took {0:mm\:ss}" -f $download.Elapsed)',
-                "}",
-                "else {",
-                '  Write-Host "Using existing CUDA installer: $installer"',
-                "}",
+                'Write-Host "Download CUDA installer..."',
+                "$download = [System.Diagnostics.Stopwatch]::StartNew()",
+                '$url = "https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda_13.3.1_windows.exe"',
+                "curl.exe -L --fail --progress-bar -o $installer $url",
+                "$download.Stop()",
+                'Write-Host ("Download took {0:mm\:ss}" -f $download.Elapsed)',
                 "",
                 "$install = [System.Diagnostics.Stopwatch]::StartNew()",
                 '$p = Start-Process -FilePath $installer -ArgumentList "-s" -Wait -PassThru',
@@ -243,6 +214,8 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
                 "if ($p.ExitCode -ne 0) {",
                 '    throw "Installer failed with exit code $($p.ExitCode)"',
                 "}",
+                "",
+                "Remove-Item -Path $installer -ErrorAction SilentlyContinue",
             ],
         )
         .add_extra(StepExecuteOnlyOncePerMatrix())
@@ -268,19 +241,6 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
     )
 
     p.add_step(
-        StepAddGitHubAction(
-            name="Cache cuDNN installer",
-            description="cache cuDNN installer",
-            id="cudnn_cache",
-            uses="actions/cache@v6",
-            with_list=[
-                "path: ${{ runner.temp }}/cudnn_9.23.2_windows_x86_64.exe",
-                "key: cudnn-installer-9.23.2",
-            ],
-        ).add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
-    )
-
-    p.add_step(
         StepWinPSCommand(
             name="Install cuDNN (Windows 10)",
             description="install cuDNN",
@@ -288,29 +248,14 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
             cmd=[
                 '$ErrorActionPreference = "Stop"',
                 "",
-                'if ("${{ steps.cudnn_cache.outputs.cache-hit }}" -eq "true") {',
-                '    Write-Host "cuDNN installer cache HIT"',
-                "} else {",
-                '    Write-Host "cuDNN installer cache MISS"',
-                "}",
-                "",
                 '$installer = "$env:TEMP\cudnn_9.23.2_windows_x86_64.exe"',
                 "",
-                "if (Test-Path $installer) {",
-                '    Write-Host "Installer present on disk"',
-                "}",
-                "",
-                "if (-not (Test-Path $installer)) {",
-                '  Write-Host "Downloading cuDNN installer..."',
-                "  $download = [System.Diagnostics.Stopwatch]::StartNew()",
-                '  $url = "https://developer.download.nvidia.com/compute/cudnn/9.23.2/local_installers/cudnn_9.23.2_windows_x86_64.exe"',
-                "  Invoke-WebRequest -Uri $url -OutFile $installer",
-                "  $download.Stop()",
-                '  Write-Host ("Download took {0:mm\:ss}" -f $download.Elapsed)',
-                "}",
-                "else {",
-                '  Write-Host "Using existing cuDNN installer: $installer"',
-                "}",
+                'Write-Host "Downloading cuDNN installer..."',
+                "$download = [System.Diagnostics.Stopwatch]::StartNew()",
+                '$url = "https://developer.download.nvidia.com/compute/cudnn/9.23.2/local_installers/cudnn_9.23.2_windows_x86_64.exe"',
+                "curl.exe -L --fail --progress-bar -o $installer $url",
+                "$download.Stop()",
+                'Write-Host ("Download took {0:mm\:ss}" -f $download.Elapsed)',
                 "",
                 "$install = [System.Diagnostics.Stopwatch]::StartNew()",
                 '$p = Start-Process -FilePath $installer -ArgumentList "-s" -Wait -PassThru',
@@ -320,6 +265,8 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
                 "if ($p.ExitCode -ne 0) {",
                 '    throw "Installer failed with exit code $($p.ExitCode)"',
                 "}",
+                "",
+                "Remove-Item -Path $installer -ErrorAction SilentlyContinue",
             ],
         )
         .add_extra(StepExecuteOnlyOncePerMatrix())
