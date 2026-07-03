@@ -120,30 +120,6 @@ jobs:
             generator_type: multiconfig
             generator_cmake: Visual Studio 18 2026
             runner: windows-2025-vs2026
-          - execution_id: 6
-            os: windows
-            os_version: v10
-            architecture: x64
-            architecture_variant: generic
-            compiler: msvcclang
-            toolset: ClangCL
-            compiler_version: default
-            generator: msvc2022
-            generator_type: multiconfig
-            generator_cmake: Visual Studio 17 2022
-            runner: windows-2022
-          - execution_id: 7
-            os: windows
-            os_version: v10
-            architecture: x64
-            architecture_variant: generic
-            compiler: msvcclang
-            toolset: ClangCL
-            compiler_version: default
-            generator: msvc2026
-            generator_type: multiconfig
-            generator_cmake: Visual Studio 18 2026
-            runner: windows-2025-vs2026
 
     steps:
       - name: csCMake Git clone/pull-ff
@@ -250,7 +226,7 @@ jobs:
         run: |
           $ErrorActionPreference = "Stop"
 
-          $installer = "$env:TEMP\cuda_13.3.1_windows.exe"
+          $installer = "$env:TEMP/cuda_13.3.1_windows.exe"
 
           Write-Host "Download CUDA installer..."
           $download = [System.Diagnostics.Stopwatch]::StartNew()
@@ -274,7 +250,7 @@ jobs:
         if: ${{ matrix.os == 'windows' }}
         shell: powershell
         run: |
-          $nvcc = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v13.3\bin\nvcc.exe"
+          $nvcc = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.3/bin/nvcc.exe"
 
           if (!(Test-Path $nvcc)) {
             throw "nvcc not found: $nvcc"
@@ -288,7 +264,7 @@ jobs:
         run: |
           $ErrorActionPreference = "Stop"
 
-          $installer = "$env:TEMP\cudnn_9.23.2_windows_x86_64.exe"
+          $installer = "$env:TEMP/cudnn_9.23.2_windows_x86_64.exe"
 
           Write-Host "Downloading cuDNN installer..."
           $download = [System.Diagnostics.Stopwatch]::StartNew()

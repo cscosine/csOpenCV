@@ -57,6 +57,7 @@ from csorchestrator.application.factory.factory import (
 from csorchestrator.application.cli.cli import orchestrator_main_with_default_run
 from csorchestrator.domain.context.context_os_architecture import OS, UBUNTU_VERSIONS
 from csorchestrator.domain.context.context_os_architecture import UBUNTU_STRING_PREFIX
+from csorchestrator.domain.context.context_compiler_generator import Compiler
 
 
 def create_orchestrator() -> OptionalOrchestratorWithReport:
@@ -81,6 +82,18 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
         execution_matrix_name="orchestrator-matrix",
         use_ninjamulti=False,
     )
+
+    # strip non used matrix configs
+    new_list = []
+    for entry in o.execution_matrix.os_architecture_compiler_generator_list:
+        if (
+            entry.context_os_architecture.os == OS.WINDOWS
+            and entry.context_compiler_generator.compiler_family != Compiler.MSVC
+        ):
+            continue
+        new_list += [entry]
+
+    o.execution_matrix.os_architecture_compiler_generator_list = new_list
 
     o.wf_config = WorkflowConfig(
         on_push_branches=["main", "dev"],
