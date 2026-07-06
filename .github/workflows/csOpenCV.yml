@@ -149,6 +149,10 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
+      - name: Install last CMake Version
+        uses: lukka/get-cmake@latest
+        if: ${{ matrix.os == 'windows' }}
+
       - name: Run command set non interactive installer
         if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu') }}
         shell: bash

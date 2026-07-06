@@ -43,6 +43,9 @@ from csorchestrator.frontend.step.step_custom_command import (
 from csorchestrator.frontend.step.step_get_precompiled_lib_github import (
     StepGetPrecompiledLibGithub,
 )
+from csorchestrator.frontend.step.step_github_action import (
+    StepAddGitHubAction,
+)
 
 from csorchestrator.frontend.local_execution.step_utils import (
     StepExecuteOnlyOn,
@@ -132,7 +135,15 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
         )
 
     # ----------------------------------------------------------------
-    p = o.create_phase("Install Requirements (Linux-Ubuntu)")
+    p = o.create_phase("Install Requirements")
+
+    p.add_step(
+        StepAddGitHubAction(
+            name="Install last CMake Version",
+            description="install last CMake Version",
+            uses="lukka/get-cmake@latest",
+        ).add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
+    )
 
     p.add_step(
         StepBashScriptCommand(
