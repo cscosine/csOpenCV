@@ -25,7 +25,10 @@ from csorchestrator.frontend.step.step_get_repository import (
     StepGetRepositoryExtraDepthOne,
     StepGetRepositoryExtraAccessToken,
 )
-from csorchestrator.frontend.step.step_cmake_command import StepCMakeWorkflow
+from csorchestrator.frontend.step.step_cmake_command import (
+    StepCMakeWorkflow,
+    StepCMakeWorkflowGithubPowershell,
+)
 from csorchestrator.frontend.step.step_get_versions_from_cmake_config_package_version import (
     StepGetVersionsFromCMakeConfigPackageVersion,
     CMakeConfigPackageVersion,
@@ -465,11 +468,29 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
         if config is not None:
             p.add_step(
                 StepCMakeWorkflow(
-                    name=f"{repo} CMake Workflow",
+                    name=f"{repo} CMake Workflow (Linux)",
+                    description=f"CMake workflow for {repo} with config: {config}",
+                    source_dir=(base_target_dir / repo).as_posix(),
+                    config=config,
+                ).add_extra(
+                    StepExecuteOnlyOn(
+                        os=OS.LINUX, version_starts_with=UBUNTU_STRING_PREFIX
+                    )
+                )
+            )
+
+    # NOTE: for some reasons, the bash is not working on windows on github, causing troubles with linker options and parameters, so we use powershell instead
+    for repo, config in repos.items():
+        if config is not None:
+            p.add_step(
+                StepCMakeWorkflow(
+                    name=f"{repo} CMake Workflow (Windows on powershell)",
                     description=f"CMake workflow for {repo} with config: {config}",
                     source_dir=(base_target_dir / repo).as_posix(),
                     config=config,
                 )
+                .add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
+                .add_extra(StepCMakeWorkflowGithubPowershell())
             )
 
     # ----------------------------------------------------------------

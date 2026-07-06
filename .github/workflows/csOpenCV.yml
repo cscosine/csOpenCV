@@ -394,7 +394,8 @@ jobs:
           tar -xzf workspace/libs/csv1-${{ matrix.os }}-${{ matrix.os_version }}-${{ matrix.architecture }}-${{ matrix.architecture_variant }}-${{ matrix.compiler }}-${{ matrix.compiler_version }}-${{ matrix.generator }}/${{ steps.filename_3rdPartyBaseLibs_eigen3.outputs.filename_3rdPartyBaseLibs_eigen3 }} -C workspace/libs/csv1-${{ matrix.os }}-${{ matrix.os_version }}-${{ matrix.architecture }}-${{ matrix.architecture_variant }}-${{ matrix.compiler }}-${{ matrix.compiler_version }}-${{ matrix.generator }}
           rm -f workspace/libs/csv1-${{ matrix.os }}-${{ matrix.os_version }}-${{ matrix.architecture }}-${{ matrix.architecture_variant }}-${{ matrix.compiler }}-${{ matrix.compiler_version }}-${{ matrix.generator }}/${{ steps.filename_3rdPartyBaseLibs_eigen3.outputs.filename_3rdPartyBaseLibs_eigen3 }}
 
-      - name: cmake workflow on opencv CMake Workflow for config(s) debug-release
+      - name: cmake workflow on opencv CMake Workflow (Linux) for config(s) debug-release
+        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu') }}
         shell: bash
         run: |
           set -e
@@ -407,6 +408,24 @@ jobs:
             echo "Unknown generator_type: ${{ matrix.generator_type }}"
             exit 1
           fi
+        working-directory: workspace/opencv
+
+      - name: cmake workflow on opencv CMake Workflow (Windows on powershell) for config(s) debug-release
+        if: ${{ matrix.os == 'windows' }}
+        shell: powershell
+        run: |
+          $gen = "${{ matrix.generator_type }}"
+          if ($gen -eq "singleconfig") {
+            cmake --workflow workflow-csv1-${{ matrix.os }}-${{ matrix.os_version }}-${{ matrix.architecture }}-${{ matrix.architecture_variant }}-${{ matrix.compiler }}-${{ matrix.compiler_version }}-${{ matrix.generator }}-debug
+            cmake --workflow workflow-csv1-${{ matrix.os }}-${{ matrix.os_version }}-${{ matrix.architecture }}-${{ matrix.architecture_variant }}-${{ matrix.compiler }}-${{ matrix.compiler_version }}-${{ matrix.generator }}-release
+          }
+          elseif ($gen -eq "multiconfig") {
+            cmake --workflow workflow-csv1-${{ matrix.os }}-${{ matrix.os_version }}-${{ matrix.architecture }}-${{ matrix.architecture_variant }}-${{ matrix.compiler }}-${{ matrix.compiler_version }}-${{ matrix.generator }}-debug-release
+          }
+          else {
+             Write-Host "Unknown generator_type: $gen"
+            exit 1
+          }
         working-directory: workspace/opencv
 
       - name: Get Versions
