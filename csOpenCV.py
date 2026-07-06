@@ -53,6 +53,7 @@ from csorchestrator.frontend.step.step_github_action import (
 from csorchestrator.frontend.local_execution.step_utils import (
     StepExecuteOnlyOn,
     StepExecuteOnlyOncePerMatrix,
+    StepGithubIfAlways,
     StepSkipExecutionOnLocal,
 )
 
@@ -492,6 +493,19 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
                 .add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
                 .add_extra(StepCMakeWorkflowGithubPowershell())
             )
+
+    p.add_step(
+        StepAddGitHubAction(
+            name="Upload build tree",
+            description="Upload build tree",
+            uses="actions/upload-artifact@v7",
+            with_list=[
+                "name: build-tree",
+                "path: workspace/build",
+                "if-no-files-found: warn",
+            ],
+        ).add_extra(StepGithubIfAlways())
+    )
 
     # ----------------------------------------------------------------
     p = o.create_phase("Create and Upload Artifacts")

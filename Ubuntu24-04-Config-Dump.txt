@@ -1,119 +1,119 @@
 -- General configuration for OpenCV 5.0.0 =====================================
---   Version control:               8edbc92
---
---   Extra modules:
---     Location (extra):            /home/runner/work/csOpenCV/csOpenCV/workspace/opencv_contrib/modules
---     Version control (extra):     755e506
---
---   Platform:
---     Timestamp:                   2026-07-01T08:18:30Z
---     Host:                        Linux 6.17.0-1018-azure x86_64
---     CMake:                       3.31.6
---     CMake generator:             Ninja
---     CMake build tool:            /usr/local/bin/ninja
---     Configuration:               Debug
---     Algorithm Hint:              ALGO_HINT_ACCURATE
---
---   CPU/HW features:
---     Baseline:                    SSE SSE2 SSE3
---       requested:                 SSE3
---     Dispatched code generation:  SSE4_1 SSE4_2 AVX FP16 AVX2 AVX512_SKX
---       SSE4_1 (20 files):         + SSSE3 SSE4_1
---       SSE4_2 (1 files):          + SSSE3 SSE4_1 POPCNT SSE4_2
---       AVX (17 files):            + SSSE3 SSE4_1 POPCNT SSE4_2 AVX
---       FP16 (0 files):            + SSSE3 SSE4_1 POPCNT SSE4_2 AVX FP16
---       AVX2 (51 files):           + SSSE3 SSE4_1 POPCNT SSE4_2 AVX FP16 AVX2 FMA3
---       AVX512_SKX (9 files):      + SSSE3 SSE4_1 POPCNT SSE4_2 AVX FP16 AVX2 FMA3 AVX_512F AVX512_COMMON AVX512_SKX
---
---   C/C++:
---     Built as dynamic libs?:      YES
---     C++ standard:                17
---     C++ Compiler:                /usr/bin/g++  (ver 13.3.0)
---     C++ flags (Release):         -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections  -msse3 -fvisibility=hidden -fvisibility-inlines-hidden -O3 -DNDEBUG  -DNDEBUG
---     C++ flags (Debug):           -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections  -msse3 -fvisibility=hidden -fvisibility-inlines-hidden -g  -O0 -DDEBUG -D_DEBUG
---     C Compiler:                  /usr/bin/gcc
---     C flags (Release):           -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections  -msse3 -fvisibility=hidden -O3 -DNDEBUG  -DNDEBUG
---     C flags (Debug):             -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections  -msse3 -fvisibility=hidden -g  -O0 -DDEBUG -D_DEBUG
---     Linker flags (Release):      -Wl,--exclude-libs,libippicv.a -Wl,--exclude-libs,libippiw.a   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined
---     Linker flags (Debug):        -Wl,--exclude-libs,libippicv.a -Wl,--exclude-libs,libippiw.a   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined
---     ccache:                      NO
---     Precompiled headers:         NO
---     Extra dependencies:          dl m pthread rt
---     3rdparty dependencies:
---
---   OpenCV modules:
---     To be built:                 alphamat bgsegm bioinspired calib ccalib core datasets dnn dnn_objdetect dnn_superres dpm face features flann freetype fuzzy gapi geometry hfs highgui img_hash imgcodecs imgproc intensity_transform line_descriptor ml objdetect optflow phase_unwrapping photo plot ptcloud python3 quality rapid reg rgbd saliency shape signal stereo stitching structured_light superres surface_matching text tracking video videoio videostab wechat_qrcode xfeatures2d ximgproc xobjdetect xphoto xstereo
---     Disabled:                    world
---     Disabled by dependency:      -
---     Unavailable:                 cannops cudaarithm cudabgsegm cudacodec cudafeatures2d cudafilters cudaimgproc cudalegacy cudaobjdetect cudaoptflow cudastereo cudawarping cudev cvv fastcv hdf java julia matlab ovis sfm ts viz
---     Applications:                -
---     Documentation:               NO
---     Non-free algorithms:         NO
---
---   GUI:                           GTK3
---     GTK+:                        YES (ver 3.24.41)
---     VTK support:                 NO
---     Built-in Unicode font:       YES
---
---   Media I/O:
---     ZLib:                        /usr/lib/x86_64-linux-gnu/libz.so (ver 1.3)
---     JPEG:                        /usr/lib/x86_64-linux-gnu/libjpeg.so (ver 80)
---     WEBP:                        /usr/lib/x86_64-linux-gnu/libwebp.so (ver decoder: 0x0209, encoder: 0x020f, demux: 0x0107)
---     AVIF:                        NO
---     PNG:                         /usr/lib/x86_64-linux-gnu/libpng.so (ver 1.6.43)
---       Metadata Support:          EXIF XMP ICC
---     TIFF:                        /usr/lib/x86_64-linux-gnu/libtiff.so (ver 42 / 4.5.1)
---     JPEG 2000:                   build (ver 2.5.3)
---     OpenEXR:                     OpenEXR::OpenEXR (ver 3.1.5)
---     GIF:                         YES
---     HDR:                         YES
---     SUNRASTER:                   YES
---     PXM:                         YES
---     PFM:                         YES
---
---   Video I/O:
---     FFMPEG:                      YES
---       avcodec:                   YES (60.31.102)
---       avformat:                  YES (60.16.100)
---       avutil:                    YES (58.29.100)
---       swscale:                   YES (7.5.100)
---       avdevice:                  NO
---     GStreamer:                   YES (1.24.2)
---     v4l/v4l2:                    YES (linux/videodev2.h)
---     Orbbec:                      YES
---
---   Parallel framework:            pthreads
---
---   Trace:                         YES (with Intel ITT(3.25.4))
---
---   Other third-party libraries:
---     Intel IPP:                   2026.0.0 [2026.0.0]
---            at:                   /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/icv
---     Intel IPP IW:                sources (2026.0.0)
---               at:                /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/iw
---     VA:                          NO
---     Lapack:                      YES (Built-In libclapack)
---     DNN MLAS:                    YES (SGEMM-only, vendored)
---       ASM kernels:               YES (X86_64: SSE2, AVX, FMA3, AVX512F)
---     Eigen:                       YES (ver 3.4.0)
---     Custom HAL:                  YES (ipp (ver 0.0.1))
---     Protobuf:                    build (3.19.1)
---     Flatbuffers:                 builtin/3rdparty (25.9.23)
---
---   OpenCL:                        YES (no extra features)
---     Include path:                /home/runner/work/csOpenCV/csOpenCV/workspace/opencv/3rdparty/include/opencl/1.2
---     Link libraries:              Dynamic load
---
---   ONNX Runtime:                  NO
---
---   Python 3:
---     Interpreter:                 /usr/bin/python3 (ver 3.12.3)
---     Libraries:                   /usr/lib/x86_64-linux-gnu/libpython3.12.so (ver 3.12.3)
---     Limited API:                 NO
---     numpy:                       /usr/lib/python3/dist-packages/numpy/core/include (ver 1.26.4)
---     install path:                lib/python3.12/dist-packages/cv2/python-3.12
---
---   Python (for build):            /usr/bin/python3
---
---   Install to:                    /home/runner/work/csOpenCV/csOpenCV/workspace/install/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv
+ Version control:               8edbc92
+
+ Extra modules:
+   Location (extra):            /home/runner/work/csOpenCV/csOpenCV/workspace/opencv_contrib/modules
+   Version control (extra):     755e506
+
+ Platform:
+   Timestamp:                   2026-07-01T08:18:30Z
+   Host:                        Linux 6.17.0-1018-azure x86_64
+   CMake:                       3.31.6
+   CMake generator:             Ninja
+   CMake build tool:            /usr/local/bin/ninja
+   Configuration:               Debug
+   Algorithm Hint:              ALGO_HINT_ACCURATE
+
+ CPU/HW features:
+   Baseline:                    SSE SSE2 SSE3
+     requested:                 SSE3
+   Dispatched code generation:  SSE4_1 SSE4_2 AVX FP16 AVX2 AVX512_SKX
+     SSE4_1 (20 files):         + SSSE3 SSE4_1
+     SSE4_2 (1 files):          + SSSE3 SSE4_1 POPCNT SSE4_2
+     AVX (17 files):            + SSSE3 SSE4_1 POPCNT SSE4_2 AVX
+     FP16 (0 files):            + SSSE3 SSE4_1 POPCNT SSE4_2 AVX FP16
+     AVX2 (51 files):           + SSSE3 SSE4_1 POPCNT SSE4_2 AVX FP16 AVX2 FMA3
+     AVX512_SKX (9 files):      + SSSE3 SSE4_1 POPCNT SSE4_2 AVX FP16 AVX2 FMA3 AVX_512F AVX512_COMMON AVX512_SKX
+
+ C/C++:
+   Built as dynamic libs?:      YES
+   C++ standard:                17
+   C++ Compiler:                /usr/bin/g++  (ver 13.3.0)
+   C++ flags (Release):         -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections  -msse3 -fvisibility=hidden -fvisibility-inlines-hidden -O3 -DNDEBUG  -DNDEBUG
+   C++ flags (Debug):           -fsigned-char -W -Wall -Wreturn-type -Wnon-virtual-dtor -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wundef -Winit-self -Wpointer-arith -Wshadow -Wsign-promo -Wuninitialized -Wsuggest-override -Wno-delete-non-virtual-dtor -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections  -msse3 -fvisibility=hidden -fvisibility-inlines-hidden -g  -O0 -DDEBUG -D_DEBUG
+   C Compiler:                  /usr/bin/gcc
+   C flags (Release):           -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections  -msse3 -fvisibility=hidden -O3 -DNDEBUG  -DNDEBUG
+   C flags (Debug):             -fsigned-char -W -Wall -Wreturn-type -Waddress -Wsequence-point -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wundef -Winit-self -Wpointer-arith -Wshadow -Wuninitialized -Wno-comment -Wimplicit-fallthrough=3 -Wno-strict-overflow -fdiagnostics-show-option -pthread -fomit-frame-pointer -ffunction-sections -fdata-sections  -msse3 -fvisibility=hidden -g  -O0 -DDEBUG -D_DEBUG
+   Linker flags (Release):      -Wl,--exclude-libs,libippicv.a -Wl,--exclude-libs,libippiw.a   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined
+   Linker flags (Debug):        -Wl,--exclude-libs,libippicv.a -Wl,--exclude-libs,libippiw.a   -Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined
+   ccache:                      NO
+   Precompiled headers:         NO
+   Extra dependencies:          dl m pthread rt
+   3rdparty dependencies:
+
+ OpenCV modules:
+   To be built:                 alphamat bgsegm bioinspired calib ccalib core datasets dnn dnn_objdetect dnn_superres dpm face features flann freetype fuzzy gapi geometry hfs highgui img_hash imgcodecs imgproc intensity_transform line_descriptor ml objdetect optflow phase_unwrapping photo plot ptcloud python3 quality rapid reg rgbd saliency shape signal stereo stitching structured_light superres surface_matching text tracking video videoio videostab wechat_qrcode xfeatures2d ximgproc xobjdetect xphoto xstereo
+   Disabled:                    world
+   Disabled by dependency:      -
+   Unavailable:                 cannops cudaarithm cudabgsegm cudacodec cudafeatures2d cudafilters cudaimgproc cudalegacy cudaobjdetect cudaoptflow cudastereo cudawarping cudev cvv fastcv hdf java julia matlab ovis sfm ts viz
+   Applications:                -
+   Documentation:               NO
+   Non-free algorithms:         NO
+
+ GUI:                           GTK3
+   GTK+:                        YES (ver 3.24.41)
+   VTK support:                 NO
+   Built-in Unicode font:       YES
+
+ Media I/O:
+   ZLib:                        /usr/lib/x86_64-linux-gnu/libz.so (ver 1.3)
+   JPEG:                        /usr/lib/x86_64-linux-gnu/libjpeg.so (ver 80)
+   WEBP:                        /usr/lib/x86_64-linux-gnu/libwebp.so (ver decoder: 0x0209, encoder: 0x020f, demux: 0x0107)
+   AVIF:                        NO
+   PNG:                         /usr/lib/x86_64-linux-gnu/libpng.so (ver 1.6.43)
+     Metadata Support:          EXIF XMP ICC
+   TIFF:                        /usr/lib/x86_64-linux-gnu/libtiff.so (ver 42 / 4.5.1)
+   JPEG 2000:                   build (ver 2.5.3)
+   OpenEXR:                     OpenEXR::OpenEXR (ver 3.1.5)
+   GIF:                         YES
+   HDR:                         YES
+   SUNRASTER:                   YES
+   PXM:                         YES
+   PFM:                         YES
+
+ Video I/O:
+   FFMPEG:                      YES
+     avcodec:                   YES (60.31.102)
+     avformat:                  YES (60.16.100)
+     avutil:                    YES (58.29.100)
+     swscale:                   YES (7.5.100)
+     avdevice:                  NO
+   GStreamer:                   YES (1.24.2)
+   v4l/v4l2:                    YES (linux/videodev2.h)
+   Orbbec:                      YES
+
+ Parallel framework:            pthreads
+
+ Trace:                         YES (with Intel ITT(3.25.4))
+
+ Other third-party libraries:
+   Intel IPP:                   2026.0.0 [2026.0.0]
+          at:                   /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/icv
+   Intel IPP IW:                sources (2026.0.0)
+             at:                /home/runner/work/csOpenCV/csOpenCV/workspace/build/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv/debug/3rdparty/ippicv/ippicv_lnx/iw
+   VA:                          NO
+   Lapack:                      YES (Built-In libclapack)
+   DNN MLAS:                    YES (SGEMM-only, vendored)
+     ASM kernels:               YES (X86_64: SSE2, AVX, FMA3, AVX512F)
+   Eigen:                       YES (ver 3.4.0)
+   Custom HAL:                  YES (ipp (ver 0.0.1))
+   Protobuf:                    build (3.19.1)
+   Flatbuffers:                 builtin/3rdparty (25.9.23)
+
+ OpenCL:                        YES (no extra features)
+   Include path:                /home/runner/work/csOpenCV/csOpenCV/workspace/opencv/3rdparty/include/opencl/1.2
+   Link libraries:              Dynamic load
+
+ ONNX Runtime:                  NO
+
+ Python 3:
+   Interpreter:                 /usr/bin/python3 (ver 3.12.3)
+   Libraries:                   /usr/lib/x86_64-linux-gnu/libpython3.12.so (ver 3.12.3)
+   Limited API:                 NO
+   numpy:                       /usr/lib/python3/dist-packages/numpy/core/include (ver 1.26.4)
+   install path:                lib/python3.12/dist-packages/cv2/python-3.12
+
+ Python (for build):            /usr/bin/python3
+
+ Install to:                    /home/runner/work/csOpenCV/csOpenCV/workspace/install/csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninja/opencv
 -- -----------------------------------------------------------------

@@ -428,6 +428,14 @@ jobs:
           }
         working-directory: workspace/opencv
 
+      - name: Upload build tree
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: build-tree
+          path: workspace/build
+          if-no-files-found: warn
+
       - name: Get Versions
         id: versions
         shell: python
