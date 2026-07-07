@@ -78,11 +78,8 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
 
     opencv_version = "5.0.0"
 
-    repos: dict[str, None | BuildConfig] = {
-        "csCMake": None,
-        "opencv": BuildConfig.DEBUG_RELEASE,
-        "opencv_contrib": None,
-    }
+    repo_opencv = "opencv"
+    repos: list[str] = ["csCMake", repo_opencv, "opencv_contrib"]
 
     o = create_orchestrator_factory_all_supported_cases(
         name="csOpenCV",
@@ -114,7 +111,7 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
 
     # ----------------------------------------------------------------
     p = o.create_phase("Repos Update")
-    for repo in repos.keys():
+    for repo in repos:
         p.add_step(
             StepGetRepositoryGitHub(
                 name=f"{repo} Git clone/pull-ff",
@@ -466,52 +463,48 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
 
     # ----------------------------------------------------------------
     p = o.create_phase("Configure-Build-Test-Install")
-    for repo, config in repos.items():
-        if config is not None:
-            p.add_step(
-                StepCMakeWorkflow(
-                    name=f"{repo} CMake Workflow (Linux)",
-                    description=f"CMake workflow for {repo} with config: {config}",
-                    source_dir=(base_target_dir / repo).as_posix(),
-                    config=config,
-                ).add_extra(
-                    StepExecuteOnlyOn(
-                        os=OS.LINUX, version_starts_with=UBUNTU_STRING_PREFIX
-                    )
-                )
-            )
 
-    # NOTE: for some reasons, the bash is not working on windows on github, causing troubles with linker options and parameters, so we use powershell instead
-    for repo, config in repos.items():
-        if config is not None:
-            p.add_step(
-                StepCMakeWorkflow(
-                    name=f"{repo} CMake Workflow (Windows on powershell)",
-                    description=f"CMake workflow for {repo} with config: {config}",
-                    source_dir=(base_target_dir / repo).as_posix(),
-                    config=config,
-                )
-                .add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
-                .add_extra(StepCMakeWorkflowGithubPowershell())
-                .add_extra(
-                    StepCMakeWorkflowGithubExtraCommandsPrefix(
-                        cmd=[
-                            "# Remove MinGW and Strawberry from path to avoid conflicts with MSVC",
-                            "$env:PATH = ($env:PATH -split ';' |",
-                            "  Where-Object {",
-                            "    $p = $_.TrimEnd('\\').ToLower()",
-                            "    $p -notmatch 'mingw|msys|strawberry'",
-                            "  }) -join ';'",
-                            "",
-                            '"PATH=$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append',
-                            'Write-Host ""',
-                            'Write-Host "PATH:"',
-                            "$env:PATH -split ';'",
-                            "",
-                        ]
-                    )
-                )
+    p.add_step(
+        StepCMakeWorkflow(
+            name=f"{repo_opencv} CMake Workflow (Linux)",
+            description=f"CMake workflow for {repo_opencv} with config: DEBUG_RELEASE",
+            source_dir=(base_target_dir / repo_opencv).as_posix(),
+            config=BuildConfig.DEBUG_RELEASE,
+        ).add_extra(
+            StepExecuteOnlyOn(os=OS.LINUX, version_starts_with=UBUNTU_STRING_PREFIX)
+        )
+    )
+
+    # NOTE: we need to use powershell for windows because of the path manipulation needed to remove MinGW and Strawberry from the path to avoid conflicts with MSVC
+    # NOTE: opencv in windows is build in release only
+    p.add_step(
+        StepCMakeWorkflow(
+            name=f"{repo_opencv} CMake Workflow (Windows on powershell)",
+            description=f"CMake workflow for {repo_opencv} with config: RELEASE",
+            source_dir=(base_target_dir / repo_opencv).as_posix(),
+            config=BuildConfig.RELEASE,
+        )
+        .add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
+        .add_extra(StepCMakeWorkflowGithubPowershell())
+        .add_extra(
+            StepCMakeWorkflowGithubExtraCommandsPrefix(
+                cmd=[
+                    "# Remove MinGW and Strawberry from path to avoid conflicts with MSVC",
+                    "$env:PATH = ($env:PATH -split ';' |",
+                    "  Where-Object {",
+                    "    $p = $_.TrimEnd('\\').ToLower()",
+                    "    $p -notmatch 'mingw|msys|strawberry'",
+                    "  }) -join ';'",
+                    "",
+                    '"PATH=$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append',
+                    'Write-Host ""',
+                    'Write-Host "PATH:"',
+                    "$env:PATH -split ';'",
+                    "",
+                ]
             )
+        )
+    )
 
     p.add_step(
         StepAddGitHubAction(
