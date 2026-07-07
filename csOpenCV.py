@@ -63,7 +63,11 @@ from csorchestrator.application.factory.factory import (
     create_orchestrator_factory_all_supported_cases,
 )
 from csorchestrator.application.cli.cli import orchestrator_main_with_default_run
-from csorchestrator.domain.context.context_os_architecture import OS, UBUNTU_VERSIONS
+from csorchestrator.domain.context.context_os_architecture import (
+    OS,
+    UBUNTU_VERSIONS,
+    Architecture,
+)
 from csorchestrator.domain.context.context_os_architecture import UBUNTU_STRING_PREFIX
 from csorchestrator.domain.context.context_compiler_generator import Compiler
 
@@ -94,9 +98,17 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
     # strip non used matrix configs
     new_list = []
     for entry in o.execution_matrix.os_architecture_compiler_generator_list:
+        # remove win non MSVC compilers because opencv is not compatible with them
         if (
             entry.context_os_architecture.os == OS.WINDOWS
             and entry.context_compiler_generator.compiler_family != Compiler.MSVC
+        ):
+            continue
+
+        # remove linux non x64 architectures for now
+        if (
+            entry.context_os_architecture.os == OS.LINUX
+            and entry.context_os_architecture.architecture != Architecture.X64
         ):
             continue
         new_list += [entry]
@@ -368,8 +380,34 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
 
     p.add_step(
         StepBashScriptCommand(
+            name="Install CUDA (Ubuntu 22.04)",
+            description="install cuda",
+            # from https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=deb_local
+            cmd=[
+                "wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin",
+                "sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600",
+                "wget -q https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb",
+                "sudo dpkg -i cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb",
+                "sudo cp /var/cuda-repo-ubuntu2204-13-3-local/cuda-*-keyring.gpg /usr/share/keyrings/",
+                "sudo apt-get update",
+                "sudo apt-get -y install cuda-toolkit-13-3",
+            ],
+        )
+        .add_extra(StepExecuteOnlyOncePerMatrix())
+        .add_extra(
+            StepExecuteOnlyOn(
+                os=OS.LINUX,
+                version_starts_with=UBUNTU_VERSIONS.UBUNTU_24_04.value,
+                arch=Architecture.X64,
+            )
+        )
+    )
+
+    p.add_step(
+        StepBashScriptCommand(
             name="Install CUDA (Ubuntu 24.04)",
             description="install cuda",
+            # from https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=24.04&target_type=deb_local
             cmd=[
                 "wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-ubuntu2404.pin",
                 "sudo mv cuda-ubuntu2404.pin /etc/apt/preferences.d/cuda-repository-pin-600",
@@ -383,48 +421,56 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
         .add_extra(StepExecuteOnlyOncePerMatrix())
         .add_extra(
             StepExecuteOnlyOn(
-                os=OS.LINUX, version_starts_with=UBUNTU_VERSIONS.UBUNTU_24_04.value
+                os=OS.LINUX,
+                version_starts_with=UBUNTU_VERSIONS.UBUNTU_24_04.value,
+                arch=Architecture.X64,
             )
         )
     )
 
     p.add_step(
         StepBashScriptCommand(
-            name="Install CUDA (Ubuntu 22.04)",
-            description="install cuda",
+            name="Install cudnn (Ubuntu 22.04)",
+            description="install cudnn",
+            # https://developer.nvidia.com/cudnn-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=deb_local&Configuration=Full
             cmd=[
-                "wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin",
-                "sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600",
-                "wget -q https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb",
-                "sudo dpkg -i cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb",
-                "sudo cp /var/cuda-repo-ubuntu2204-13-3-local/cuda-*-keyring.gpg /usr/share/keyrings/",
-                "sudo apt update",
-                "sudo apt install -y cuda-toolkit-13-3",
+                "wget -q https://developer.download.nvidia.com/compute/cudnn/9.24.0/local_installers/cudnn-local-repo-ubuntu2204-9.24.0_1.0-1_amd64.deb",
+                "sudo dpkg -i cudnn-local-repo-ubuntu2204-9.24.0_1.0-1_amd64.deb",
+                "sudo cp /var/cudnn-local-repo-ubuntu2204-9.24.0/cudnn-*-keyring.gpg /usr/share/keyrings/",
+                "sudo apt-get update",
+                "sudo apt-get -y install libcudnn9-cuda-13 libcudnn9-dev-cuda-13",
             ],
         )
         .add_extra(StepExecuteOnlyOncePerMatrix())
         .add_extra(
             StepExecuteOnlyOn(
-                os=OS.LINUX, version_starts_with=UBUNTU_VERSIONS.UBUNTU_22_04.value
+                os=OS.LINUX,
+                version_starts_with=UBUNTU_VERSIONS.UBUNTU_22_04.value,
+                arch=Architecture.X64,
             )
         )
     )
 
     p.add_step(
         StepBashScriptCommand(
-            name="Install cudnn (Ubuntu)",
+            name="Install cudnn (Ubuntu 24.04)",
             description="install cudnn",
+            # https://developer.nvidia.com/cudnn-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=24.04&target_type=deb_local&Configuration=Full
             cmd=[
-                "wget -q https://developer.download.nvidia.com/compute/cudnn/9.23.2/local_installers/cudnn-local-repo-debian12-9.23.2_1.0-1_amd64.deb",
-                "sudo dpkg -i cudnn-local-repo-debian12-9.23.2_1.0-1_amd64.deb",
-                "sudo cp /var/cudnn-local-repo-debian12-9.23.2/cudnn-*-keyring.gpg /usr/share/keyrings/",
-                "sudo apt update",
-                "sudo apt -y install libcudnn9-cuda-13 libcudnn9-dev-cuda-13",
+                "wget -q https://developer.download.nvidia.com/compute/cudnn/9.24.0/local_installers/cudnn-local-repo-ubuntu2404-9.24.0_1.0-1_amd64.deb",
+                "sudo dpkg -i cudnn-local-repo-ubuntu2404-9.24.0_1.0-1_amd64.deb",
+                "sudo cp /var/cudnn-local-repo-ubuntu2404-9.24.0/cudnn-*-keyring.gpg /usr/share/keyrings/",
+                "sudo apt-get update",
+                "sudo apt-get -y install libcudnn9-cuda-13 libcudnn9-dev-cuda-13",
             ],
         )
         .add_extra(StepExecuteOnlyOncePerMatrix())
         .add_extra(
-            StepExecuteOnlyOn(os=OS.LINUX, version_starts_with=UBUNTU_STRING_PREFIX)
+            StepExecuteOnlyOn(
+                os=OS.LINUX,
+                version_starts_with=UBUNTU_VERSIONS.UBUNTU_24_04.value,
+                arch=Architecture.X64,
+            )
         )
     )
 

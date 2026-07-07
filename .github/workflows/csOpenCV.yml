@@ -74,8 +74,8 @@ jobs:
             runner: ubuntu-22.04
           - execution_id: 2
             os: linux
-            os_version: ubuntu22.04
-            architecture: arm64
+            os_version: ubuntu24.04
+            architecture: x64
             architecture_variant: generic
             compiler: gcc
             c_compiler: gcc
@@ -84,11 +84,11 @@ jobs:
             generator: ninja
             generator_type: singleconfig
             generator_cmake: Ninja
-            runner: ubuntu-22.04-arm
+            runner: ubuntu-24.04
           - execution_id: 3
             os: linux
-            os_version: ubuntu22.04
-            architecture: arm64
+            os_version: ubuntu24.04
+            architecture: x64
             architecture_variant: generic
             compiler: clang
             c_compiler: clang
@@ -97,60 +97,8 @@ jobs:
             generator: ninja
             generator_type: singleconfig
             generator_cmake: Ninja
-            runner: ubuntu-22.04-arm
+            runner: ubuntu-24.04
           - execution_id: 4
-            os: linux
-            os_version: ubuntu24.04
-            architecture: x64
-            architecture_variant: generic
-            compiler: gcc
-            c_compiler: gcc
-            cpp_compiler: g++
-            compiler_version: default
-            generator: ninja
-            generator_type: singleconfig
-            generator_cmake: Ninja
-            runner: ubuntu-24.04
-          - execution_id: 5
-            os: linux
-            os_version: ubuntu24.04
-            architecture: x64
-            architecture_variant: generic
-            compiler: clang
-            c_compiler: clang
-            cpp_compiler: clang++
-            compiler_version: default
-            generator: ninja
-            generator_type: singleconfig
-            generator_cmake: Ninja
-            runner: ubuntu-24.04
-          - execution_id: 6
-            os: linux
-            os_version: ubuntu24.04
-            architecture: arm64
-            architecture_variant: generic
-            compiler: gcc
-            c_compiler: gcc
-            cpp_compiler: g++
-            compiler_version: default
-            generator: ninja
-            generator_type: singleconfig
-            generator_cmake: Ninja
-            runner: ubuntu-24.04-arm
-          - execution_id: 7
-            os: linux
-            os_version: ubuntu24.04
-            architecture: arm64
-            architecture_variant: generic
-            compiler: clang
-            c_compiler: clang
-            cpp_compiler: clang++
-            compiler_version: default
-            generator: ninja
-            generator_type: singleconfig
-            generator_cmake: Ninja
-            runner: ubuntu-24.04-arm
-          - execution_id: 8
             os: windows
             os_version: v10
             architecture: x64
@@ -161,7 +109,7 @@ jobs:
             generator_type: multiconfig
             generator_cmake: Visual Studio 17 2022
             runner: windows-2022
-          - execution_id: 9
+          - execution_id: 5
             os: windows
             os_version: v10
             architecture: x64
@@ -383,8 +331,20 @@ jobs:
           Write-Host "Include path verified: ${includePath}"
           Write-Host "Library verified: ${libFile}"
 
+      - name: Run command Install CUDA (Ubuntu 22.04)
+        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu24.04') && matrix.architecture == 'x64' }}
+        shell: bash
+        run: |
+          wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
+          sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
+          wget -q https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb
+          sudo dpkg -i cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb
+          sudo cp /var/cuda-repo-ubuntu2204-13-3-local/cuda-*-keyring.gpg /usr/share/keyrings/
+          sudo apt-get update
+          sudo apt-get -y install cuda-toolkit-13-3
+
       - name: Run command Install CUDA (Ubuntu 24.04)
-        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu24.04') }}
+        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu24.04') && matrix.architecture == 'x64' }}
         shell: bash
         run: |
           wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-ubuntu2404.pin
@@ -395,27 +355,25 @@ jobs:
           sudo apt update
           sudo apt install -y cuda-toolkit-13-3
 
-      - name: Run command Install CUDA (Ubuntu 22.04)
-        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu22.04') }}
+      - name: Run command Install cudnn (Ubuntu 22.04)
+        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu22.04') && matrix.architecture == 'x64' }}
         shell: bash
         run: |
-          wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
-          sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
-          wget -q https://developer.download.nvidia.com/compute/cuda/13.3.1/local_installers/cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb
-          sudo dpkg -i cuda-repo-ubuntu2204-13-3-local_13.3.1-610.43.02-1_amd64.deb
-          sudo cp /var/cuda-repo-ubuntu2204-13-3-local/cuda-*-keyring.gpg /usr/share/keyrings/
-          sudo apt update
-          sudo apt install -y cuda-toolkit-13-3
+          wget -q https://developer.download.nvidia.com/compute/cudnn/9.24.0/local_installers/cudnn-local-repo-ubuntu2204-9.24.0_1.0-1_amd64.deb
+          sudo dpkg -i cudnn-local-repo-ubuntu2204-9.24.0_1.0-1_amd64.deb
+          sudo cp /var/cudnn-local-repo-ubuntu2204-9.24.0/cudnn-*-keyring.gpg /usr/share/keyrings/
+          sudo apt-get update
+          sudo apt-get -y install libcudnn9-cuda-13 libcudnn9-dev-cuda-13
 
-      - name: Run command Install cudnn (Ubuntu)
-        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu') }}
+      - name: Run command Install cudnn (Ubuntu 24.04)
+        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu24.04') && matrix.architecture == 'x64' }}
         shell: bash
         run: |
-          wget -q https://developer.download.nvidia.com/compute/cudnn/9.23.2/local_installers/cudnn-local-repo-debian12-9.23.2_1.0-1_amd64.deb
-          sudo dpkg -i cudnn-local-repo-debian12-9.23.2_1.0-1_amd64.deb
-          sudo cp /var/cudnn-local-repo-debian12-9.23.2/cudnn-*-keyring.gpg /usr/share/keyrings/
-          sudo apt update
-          sudo apt -y install libcudnn9-cuda-13 libcudnn9-dev-cuda-13
+          wget -q https://developer.download.nvidia.com/compute/cudnn/9.24.0/local_installers/cudnn-local-repo-ubuntu2404-9.24.0_1.0-1_amd64.deb
+          sudo dpkg -i cudnn-local-repo-ubuntu2404-9.24.0_1.0-1_amd64.deb
+          sudo cp /var/cudnn-local-repo-ubuntu2404-9.24.0/cudnn-*-keyring.gpg /usr/share/keyrings/
+          sudo apt-get update
+          sudo apt-get -y install libcudnn9-cuda-13 libcudnn9-dev-cuda-13
 
       - name: Run command verify a cuda stub library exists
         if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu') }}
