@@ -27,6 +27,7 @@ from csorchestrator.frontend.step.step_get_repository import (
 )
 from csorchestrator.frontend.step.step_cmake_command import (
     StepCMakeWorkflow,
+    StepCMakeWorkflowGithubExtraCommandsPrefix,
     StepCMakeWorkflowGithubPowershell,
 )
 from csorchestrator.frontend.step.step_get_versions_from_cmake_config_package_version import (
@@ -109,53 +110,6 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
         on_dispatch=True,
         on_schedule=Cron.weekly(DayOfWeek.MON, hour=3),
         create_release_on_tag=ReleaseCreationOnTagConfig(name="release-from-artifacts"),
-    )
-    # ----------------------------------------------------------------
-    p = o.create_phase("Print Paths and Environment Variables")
-    p.add_step(
-        StepWinPSCommand(
-            name="Show Env Variables and Path",
-            description="Show Env Variables and Path",
-            cmd=[
-                "Get-ChildItem Env:",
-                'Write-Host ""',
-                'Write-Host "PATH:"',
-                "$env:PATH -split ';'",
-            ],
-        )
-        .add_extra(StepExecuteOnlyOncePerMatrix())
-        .add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
-    )
-
-    p.add_step(
-        StepWinPSCommand(
-            name="Remove MinGW from path",
-            description="Remove MinGW from path",
-            cmd=[
-                "$newPath = ($env:PATH -split ';' |",
-                "Where-Object {",
-                "  $_.TrimEnd('\\').ToLower() -ne 'c:\\program files\\git\\mingw64\\bin'",
-                "}) -join ';'",
-                "",
-                '"PATH=$newPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append',
-                'Write-Host ""',
-            ],
-        )
-        .add_extra(StepExecuteOnlyOncePerMatrix())
-        .add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
-    )
-
-    p.add_step(
-        StepWinPSCommand(
-            name="Show Modified Path",
-            description="Show Modified Path",
-            cmd=[
-                'Write-Host "PATH:"',
-                "$env:PATH -split ';'",
-            ],
-        )
-        .add_extra(StepExecuteOnlyOncePerMatrix())
-        .add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
     )
 
     # ----------------------------------------------------------------
@@ -539,6 +493,25 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
                 )
                 .add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
                 .add_extra(StepCMakeWorkflowGithubPowershell())
+                .add_extra(
+                    StepCMakeWorkflowGithubExtraCommandsPrefix(
+                        cmd=[
+                            "# Remove MinGW from path to avoid conflicts with MSVC",
+                            "$env:PATH = ($env:PATH -split ';' |",
+                            "  Where-Object {",
+                            "    $p = $_.TrimEnd('\\').ToLower()",
+                            "    $p -ne 'c:\\program files\\git\\mingw64\\bin' -and",
+                            "    $p -ne 'c:\\mingw64\\bin'",
+                            "  }) -join ';'",
+                            "",
+                            '"PATH=$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append',
+                            'Write-Host ""',
+                            'Write-Host "PATH:"',
+                            "$env:PATH -split ';'",
+                            "",
+                        ]
+                    )
+                )
             )
 
     p.add_step(
