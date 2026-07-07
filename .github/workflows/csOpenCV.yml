@@ -122,6 +122,15 @@ jobs:
             runner: windows-2025-vs2026
 
     steps:
+      - name: Run command Show Env Variables
+        if: ${{ matrix.os == 'windows' }}
+        shell: powershell
+        run: |
+          Get-ChildItem Env:
+          Write-Host ""
+          Write-Host "PATH:"
+          $env:PATH -split ';'
+
       - name: csCMake Git clone/pull-ff
         uses: actions/checkout@v6
         with:
