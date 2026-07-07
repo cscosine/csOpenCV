@@ -74,6 +74,32 @@ jobs:
             runner: ubuntu-22.04
           - execution_id: 2
             os: linux
+            os_version: ubuntu22.04
+            architecture: arm64
+            architecture_variant: generic
+            compiler: gcc
+            c_compiler: gcc
+            cpp_compiler: g++
+            compiler_version: default
+            generator: ninja
+            generator_type: singleconfig
+            generator_cmake: Ninja
+            runner: ubuntu-22.04-arm
+          - execution_id: 3
+            os: linux
+            os_version: ubuntu22.04
+            architecture: arm64
+            architecture_variant: generic
+            compiler: clang
+            c_compiler: clang
+            cpp_compiler: clang++
+            compiler_version: default
+            generator: ninja
+            generator_type: singleconfig
+            generator_cmake: Ninja
+            runner: ubuntu-22.04-arm
+          - execution_id: 4
+            os: linux
             os_version: ubuntu24.04
             architecture: x64
             architecture_variant: generic
@@ -85,7 +111,7 @@ jobs:
             generator_type: singleconfig
             generator_cmake: Ninja
             runner: ubuntu-24.04
-          - execution_id: 3
+          - execution_id: 5
             os: linux
             os_version: ubuntu24.04
             architecture: x64
@@ -98,7 +124,33 @@ jobs:
             generator_type: singleconfig
             generator_cmake: Ninja
             runner: ubuntu-24.04
-          - execution_id: 4
+          - execution_id: 6
+            os: linux
+            os_version: ubuntu24.04
+            architecture: arm64
+            architecture_variant: generic
+            compiler: gcc
+            c_compiler: gcc
+            cpp_compiler: g++
+            compiler_version: default
+            generator: ninja
+            generator_type: singleconfig
+            generator_cmake: Ninja
+            runner: ubuntu-24.04-arm
+          - execution_id: 7
+            os: linux
+            os_version: ubuntu24.04
+            architecture: arm64
+            architecture_variant: generic
+            compiler: clang
+            c_compiler: clang
+            cpp_compiler: clang++
+            compiler_version: default
+            generator: ninja
+            generator_type: singleconfig
+            generator_cmake: Ninja
+            runner: ubuntu-24.04-arm
+          - execution_id: 8
             os: windows
             os_version: v10
             architecture: x64
@@ -109,7 +161,7 @@ jobs:
             generator_type: multiconfig
             generator_cmake: Visual Studio 17 2022
             runner: windows-2022
-          - execution_id: 5
+          - execution_id: 9
             os: windows
             os_version: v10
             architecture: x64
@@ -438,14 +490,6 @@ jobs:
             exit 1
           }
         working-directory: workspace/opencv
-
-      - name: Upload build tree
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: build-tree
-          path: workspace/build
-          if-no-files-found: warn
 
       - name: Get Versions
         id: versions

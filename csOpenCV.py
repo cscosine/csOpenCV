@@ -71,6 +71,9 @@ from csorchestrator.domain.context.context_compiler_generator import Compiler
 def create_orchestrator() -> OptionalOrchestratorWithReport:
     report = Report()
 
+    # set to True to upload the build tree as an artifact for debugging purposes
+    flag_debug_upload_build_tree = False
+
     base_target_dir = Path("workspace")
     base_install_dir = base_target_dir / Path("install")
     base_libs_dir = base_target_dir / Path("libs")
@@ -506,18 +509,22 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
         )
     )
 
-    p.add_step(
-        StepAddGitHubAction(
-            name="Upload build tree",
-            description="Upload build tree",
-            uses="actions/upload-artifact@v7",
-            with_list=[
-                "name: build-tree",
-                "path: workspace/build",
-                "if-no-files-found: warn",
-            ],
-        ).add_extra(StepGithubIfAlways())
-    )
+    if flag_debug_upload_build_tree:
+        report.append_warning(
+            "Debug flag 'flag_debug_upload_build_tree' is set to True, the build tree will be uploaded as an artifact."
+        )
+        p.add_step(
+            StepAddGitHubAction(
+                name="Upload build tree",
+                description="Upload build tree",
+                uses="actions/upload-artifact@v7",
+                with_list=[
+                    "name: build-tree",
+                    "path: workspace/build",
+                    "if-no-files-found: warn",
+                ],
+            ).add_extra(StepGithubIfAlways())
+        )
 
     # ----------------------------------------------------------------
     p = o.create_phase("Create and Upload Artifacts")
