@@ -332,7 +332,7 @@ jobs:
           Write-Host "Library verified: ${libFile}"
 
       - name: Run command Install CUDA (Ubuntu 22.04)
-        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu24.04') && matrix.architecture == 'x64' }}
+        if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu22.04') && matrix.architecture == 'x64' }}
         shell: bash
         run: |
           wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin

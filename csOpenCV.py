@@ -397,7 +397,7 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
         .add_extra(
             StepExecuteOnlyOn(
                 os=OS.LINUX,
-                version_starts_with=UBUNTU_VERSIONS.UBUNTU_24_04.value,
+                version_starts_with=UBUNTU_VERSIONS.UBUNTU_22_04.value,
                 arch=Architecture.X64,
             )
         )
