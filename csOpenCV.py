@@ -496,12 +496,11 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
                 .add_extra(
                     StepCMakeWorkflowGithubExtraCommandsPrefix(
                         cmd=[
-                            "# Remove MinGW from path to avoid conflicts with MSVC",
+                            "# Remove MinGW and Strawberry from path to avoid conflicts with MSVC",
                             "$env:PATH = ($env:PATH -split ';' |",
                             "  Where-Object {",
                             "    $p = $_.TrimEnd('\\').ToLower()",
-                            "    $p -ne 'c:\\program files\\git\\mingw64\\bin' -and",
-                            "    $p -ne 'c:\\mingw64\\bin'",
+                            "    $p -notmatch 'mingw|msys|strawberry'",
                             "  }) -join ';'",
                             "",
                             '"PATH=$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append',
