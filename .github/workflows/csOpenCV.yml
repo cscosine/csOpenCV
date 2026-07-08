@@ -149,10 +149,6 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
-      - name: Install last CMake Version
-        uses: lukka/get-cmake@latest
-        if: ${{ matrix.os == 'windows' }}
-
       - name: Run command set non interactive installer
         if: ${{ matrix.os == 'linux' && startsWith(matrix.os_version, 'ubuntu') }}
         shell: bash
@@ -394,7 +390,7 @@ jobs:
         uses: robinraju/release-downloader@v1.13
         with:
           repository: cscosine/3rdPartyBaseLibs
-          tag: v0.1.0-test
+          tag: v0.1.0
           fileName: ${{ steps.filename_3rdPartyBaseLibs_eigen3.outputs.filename_3rdPartyBaseLibs_eigen3 }}
           out-file-path: workspace/libs/csv1-${{ matrix.os }}-${{ matrix.os_version }}-${{ matrix.architecture }}-${{ matrix.architecture_variant }}-${{ matrix.compiler }}-${{ matrix.compiler_version }}-${{ matrix.generator }}
 

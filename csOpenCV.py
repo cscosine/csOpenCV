@@ -155,14 +155,6 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
     p = o.create_phase("Install Requirements")
 
     p.add_step(
-        StepAddGitHubAction(
-            name="Install last CMake Version",
-            description="install last CMake Version",
-            uses="lukka/get-cmake@latest",
-        ).add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
-    )
-
-    p.add_step(
         StepBashScriptCommand(
             name="set non interactive installer",
             description="install apt packages if not already installed in the system",
@@ -503,7 +495,7 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
                 base_url=StepGetPrecompiledLibGithub.GITHUB_BASE_URL_HTTPS,
                 org="cscosine",
                 project_name="3rdPartyBaseLibs",
-                project_tag="v0.1.0-test",
+                project_tag="v0.1.0",
                 lib_name=lib_name,
                 lib_version=lib_version,
                 base_libs_dir=base_libs_dir,
