@@ -89,12 +89,11 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
     base_target_dir = Path("workspace")
     base_install_dir = base_target_dir / Path("install")
     base_libs_dir = base_target_dir / Path("libs")
-    common_repo_ref = "dev"
 
     opencv_version = "5.0.0"
 
     repo_opencv = "opencv"
-    repos: list[str] = ["csCMake", repo_opencv, "opencv_contrib"]
+    repos: dict[str, str] = {"csCMake": "dev", "opencv": "dev", "opencv_contrib": "dev"}
 
     o = create_orchestrator_factory_all_supported_cases(
         name="csOpenCV",
@@ -134,7 +133,7 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
 
     # ----------------------------------------------------------------
     p = o.create_phase("Repos Update")
-    for repo in repos:
+    for repo, config in repos.items():
         p.add_step(
             StepGetRepositoryGitHub(
                 name=f"{repo} Git clone/pull-ff",
@@ -145,7 +144,7 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
                     repo_org="cscosine",
                     repo_name=repo + ".git",
                 ),
-                repo_ref=common_repo_ref,
+                repo_ref=config,
             )
             .add_extra(
                 StepGetRepositoryExtraDepthOne(
