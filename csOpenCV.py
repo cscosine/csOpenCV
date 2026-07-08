@@ -93,7 +93,7 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
     opencv_version = "5.0.0"
 
     repo_opencv = "opencv"
-    repos: dict[str, str] = {"csCMake": "dev", "opencv": "dev", "opencv_contrib": "dev"}
+    repos: dict[str, str] = {"csCMake": "main", "opencv": "main", "opencv_contrib": "main"}
 
     o = create_orchestrator_factory_all_supported_cases(
         name="csOpenCV",
