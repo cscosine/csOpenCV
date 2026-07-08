@@ -127,7 +127,7 @@ jobs:
         with:
           repository: cscosine/csCMake.git
           path: workspace/csCMake
-          ref: main
+          ref: v0.1.0
           fetch-depth: 1
           token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
@@ -136,7 +136,7 @@ jobs:
         with:
           repository: cscosine/opencv.git
           path: workspace/opencv
-          ref: main
+          ref: v5.0.0
           fetch-depth: 1
           token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
@@ -145,7 +145,7 @@ jobs:
         with:
           repository: cscosine/opencv_contrib.git
           path: workspace/opencv_contrib
-          ref: main
+          ref: v5.0.0
           fetch-depth: 1
           token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
