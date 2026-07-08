@@ -382,9 +382,27 @@ jobs:
         shell: python
         run: |
           import os
+          import sys
+
+          execution_id = int("${{ matrix.execution_id }}")
+
+          filenames = {
+              0: "csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninjamulticonfig",
+              1: "csv1-linux-ubuntu22.04-x64-generic-gcc-default-ninjamulticonfig",
+              2: "csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninjamulticonfig",
+              3: "csv1-linux-ubuntu24.04-x64-generic-gcc-default-ninjamulticonfig",
+              4: "csv1-windows-v10-x64-generic-msvc-default-msvc2022",
+              5: "csv1-windows-v10-x64-generic-msvc-default-msvc2026",
+          }
+
+          if execution_id not in filenames:
+              print("Unsupported matrix entry")
+              sys.exit(1)
+
+          filename = filenames[execution_id] + '-eigen3-3.4.0.tar.gz'
 
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-            f.write(f"filename_3rdPartyBaseLibs_eigen3=csv1-${{ matrix.os }}-${{ matrix.os_version }}-${{ matrix.architecture }}-${{ matrix.architecture_variant }}-${{ matrix.compiler }}-${{ matrix.compiler_version }}-${{ matrix.generator }}-eigen3-3.4.0.tar.gz\n")
+              f.write(f"filename_3rdPartyBaseLibs_eigen3={filename}\n")
 
       - name: Get Precompiled Lib eigen3 from 3rdPartyBaseLibs download tar.gz
         uses: robinraju/release-downloader@v1.13

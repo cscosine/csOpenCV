@@ -71,6 +71,14 @@ from csorchestrator.domain.context.context_os_architecture import (
 from csorchestrator.domain.context.context_os_architecture import UBUNTU_STRING_PREFIX
 from csorchestrator.domain.context.context_compiler_generator import Compiler
 
+from csorchestrator.domain.context.context_os_architecture_compiler_generator import (
+    ContextOsArchitectureCompilerGenerator,
+)
+from csorchestrator.domain.context.context_compiler_generator import (
+    ContextCompilerGenerator,
+    GeneratorWithType,
+)
+
 
 def create_orchestrator() -> OptionalOrchestratorWithReport:
     report = Report()
@@ -487,6 +495,27 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
         "eigen3": "3.4.0",
     }
 
+    def lib_3rdPartyBaseLibs_mapping(
+        context: ContextOsArchitectureCompilerGenerator,
+    ) -> ContextOsArchitectureCompilerGenerator | None:
+        newContext = context
+
+        # OpenCV is built with ninja bc is not compatible with ninjamulti
+        # we need to get eigen as a precompiled lib with ninja_multi
+        if context.context_os_architecture.os == OS.LINUX:
+            if (
+                context.context_os_architecture.os_version
+                == UBUNTU_VERSIONS.UBUNTU_22_04.value
+                or context.context_os_architecture.os_version
+                == UBUNTU_VERSIONS.UBUNTU_24_04.value
+            ):
+                newContext.context_compiler_generator = ContextCompilerGenerator(
+                    compiler_family=Compiler.GCC,
+                    compiler_version=ContextCompilerGenerator.COMPILER_VERSION_DEFAULT,
+                    build_generator=GeneratorWithType.NINJA_MULTI,
+                )
+        return newContext
+
     for lib_name, lib_version in list_3rdPartyBaseLibs.items():
         p.add_step(
             StepGetPrecompiledLibGithub(
@@ -499,6 +528,7 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
                 lib_name=lib_name,
                 lib_version=lib_version,
                 base_libs_dir=base_libs_dir,
+                mapping_function=lib_3rdPartyBaseLibs_mapping,
             )
         )
 
@@ -599,7 +629,7 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
     return OptionalResultWithReport.createResultAndReport(o, report)
 
 
-def main(argv: Sequence[str] | None = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:  #
     script_path = str(Path(__file__).resolve())
     return orchestrator_main_with_default_run(script_path, argv)
 
