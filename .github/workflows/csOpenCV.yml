@@ -136,7 +136,7 @@ jobs:
         with:
           repository: cscosine/opencv.git
           path: workspace/opencv
-          ref: cs-main
+          ref: dev
           fetch-depth: 1
           token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
@@ -145,7 +145,7 @@ jobs:
         with:
           repository: cscosine/opencv_contrib.git
           path: workspace/opencv_contrib
-          ref: cs-main
+          ref: dev
           fetch-depth: 1
           token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
@@ -434,7 +434,7 @@ jobs:
           fi
         working-directory: workspace/opencv
 
-      - name: cmake workflow on opencv CMake Workflow (Windows on powershell) for config(s) release
+      - name: cmake workflow on opencv CMake Workflow (Windows on powershell) for config(s) debug-release
         if: ${{ matrix.os == 'windows' }}
         shell: powershell
         run: |
@@ -452,10 +452,11 @@ jobs:
 
           $gen = "${{ matrix.generator_type }}"
           if ($gen -eq "singleconfig") {
+            cmake --workflow workflow-csv1-${{ matrix.os }}-${{ matrix.os_version }}-${{ matrix.architecture }}-${{ matrix.architecture_variant }}-${{ matrix.compiler }}-${{ matrix.compiler_version }}-${{ matrix.generator }}-debug
             cmake --workflow workflow-csv1-${{ matrix.os }}-${{ matrix.os_version }}-${{ matrix.architecture }}-${{ matrix.architecture_variant }}-${{ matrix.compiler }}-${{ matrix.compiler_version }}-${{ matrix.generator }}-release
           }
           elseif ($gen -eq "multiconfig") {
-            cmake --workflow workflow-csv1-${{ matrix.os }}-${{ matrix.os_version }}-${{ matrix.architecture }}-${{ matrix.architecture_variant }}-${{ matrix.compiler }}-${{ matrix.compiler_version }}-${{ matrix.generator }}-release
+            cmake --workflow workflow-csv1-${{ matrix.os }}-${{ matrix.os_version }}-${{ matrix.architecture }}-${{ matrix.architecture_variant }}-${{ matrix.compiler }}-${{ matrix.compiler_version }}-${{ matrix.generator }}-debug-release
           }
           else {
              Write-Host "Unknown generator_type: $gen"
