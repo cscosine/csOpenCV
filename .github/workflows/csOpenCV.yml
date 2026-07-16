@@ -136,7 +136,7 @@ jobs:
         with:
           repository: cscosine/opencv.git
           path: workspace/opencv
-          ref: dev
+          ref: cs-main
           fetch-depth: 1
           token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
@@ -145,7 +145,7 @@ jobs:
         with:
           repository: cscosine/opencv_contrib.git
           path: workspace/opencv_contrib
-          ref: dev
+          ref: cs-main
           fetch-depth: 1
           token: ${{ secrets.ACTIONS_ORG_ACCESS }}
 
@@ -473,6 +473,22 @@ jobs:
           import json
           import sys
           import os
+          from dataclasses import dataclass
+
+          @dataclass(frozen=True)
+          class CMakeConfigPackageVersionGrep:
+              name: str
+              version_file: Path
+
+          @dataclass(frozen=True)
+          class CMakeConfigPackageVersion:
+              name: str
+              version: str
+
+          @dataclass
+          class VersionSearchOutput:
+              versions: list[str]
+              errors: list[str]
 
           def grep_package_version(filename: Path) -> tuple[str | None, str | None]:
               path = Path(filename)
