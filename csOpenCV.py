@@ -93,7 +93,11 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
     opencv_version = "5.0.0"
 
     repo_opencv = "opencv"
-    repos: dict[str, str] = {"csCMake": "main", "opencv": "cs-main", "opencv_contrib": "cs-main"}
+    repos: dict[str, str] = {
+        "csCMake": "main",
+        "opencv": "dev",
+        "opencv_contrib": "dev",
+    }
 
     o = create_orchestrator_factory_all_supported_cases(
         name="csOpenCV",
@@ -546,13 +550,12 @@ def create_orchestrator() -> OptionalOrchestratorWithReport:
     )
 
     # NOTE: we need to use powershell for windows because of the path manipulation needed to remove MinGW and Strawberry from the path to avoid conflicts with MSVC
-    # NOTE: opencv in windows is build in release only
     p.add_step(
         StepCMakeWorkflow(
             name=f"{repo_opencv} CMake Workflow (Windows on powershell)",
-            description=f"CMake workflow for {repo_opencv} with config: RELEASE",
+            description=f"CMake workflow for {repo_opencv} with config: DEBUG_RELEASE",
             source_dir=(base_target_dir / repo_opencv).as_posix(),
-            config=BuildConfig.RELEASE,
+            config=BuildConfig.DEBUG_RELEASE,
         )
         .add_extra(StepExecuteOnlyOn(os=OS.WINDOWS))
         .add_extra(StepCMakeWorkflowGithubPowershell())
